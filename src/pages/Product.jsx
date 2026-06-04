@@ -23,7 +23,7 @@ const Product = () => {
 
       console.log("Token:", token)
       const response = await axios.get(
-        `http://localhost:4009/api/v1/getProd/${id}`,
+        `https://lcbe.onrender.com/api/v1/getProd/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -60,7 +60,7 @@ const Product = () => {
     try {
 
       const response = await axios.post(
-        "http://localhost:4009/api/v1/addToCart",
+        "https://lcbe.onrender.com/api/v1/addToCart",
         {
           userId,
           productId: product._id,

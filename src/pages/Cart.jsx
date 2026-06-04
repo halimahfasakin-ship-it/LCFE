@@ -15,7 +15,7 @@ const Cart = () => {
     try {
 
       const response = await axios.get(
-        `http://localhost:4009/api/v1/getUserCart/${userId}`,
+        `https://lcbe.onrender.com/api/v1/getUserCart/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${cookies.get("token")}`
@@ -41,7 +41,7 @@ const Cart = () => {
     try {
 
       await axios.delete(
-        `http://localhost:4009/api/v1/removeFromCart/${userId}/${productId}`,
+        `https://lcbe.onrender.com/api/v1/removeFromCart/${userId}/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${cookies.get("token")}`
@@ -64,7 +64,7 @@ const Cart = () => {
     try {
 
       await axios.patch(
-        `http://localhost:4009/api/v1/increaseQuantity/${userId}/${productId}`
+        `https://lcbe.onrender.com/api/v1/increaseQuantity/${userId}/${productId}`
       ,{}, {
         headers: {
           Authorization: `Bearer ${cookies.get("token")}`
@@ -86,7 +86,7 @@ const Cart = () => {
     try {
 
       await axios.patch(
-        `http://localhost:4009/api/v1/decreaseQuantity/${userId}/${productId}`
+        `https://lcbe.onrender.com/api/v1/decreaseQuantity/${userId}/${productId}`
       ,{}, {
         headers: {
           Authorization: `Bearer ${cookies.get("token")}` 

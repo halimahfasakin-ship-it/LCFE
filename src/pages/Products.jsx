@@ -15,7 +15,7 @@ const Products = () => {
   const getProducts = async () => {
     try {
 
-      const response = await axios.get( "http://localhost:4009/api/v1/getProds")
+      const response = await axios.get( "https://lcbe.onrender.com/api/v1/getProds")
 
       console.log(response.data)
 
@@ -38,7 +38,7 @@ const Products = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4009/api/v1/addToCart",
+        "https://lcbe.onrender.com/api/v1/addToCart",
         {
           userId,
           productId,

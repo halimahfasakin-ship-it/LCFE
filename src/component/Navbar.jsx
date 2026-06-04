@@ -21,7 +21,7 @@ const Navbar = ({ setCartOpen }) => {
     const [cartCount, setCartCount] =useState(0);
     const getCartCount = async () => {
         try {
-            const response = await fetch(`http://localhost:4009/api/v1/getUserCart/${cookies.get("userId")}`, {
+            const response = await fetch(`https://lcbe.onrender.com/api/v1/getUserCart/${cookies.get("userId")}`, {
                 headers: {
                     Authorization: `Bearer ${cookies.get("token")}`
                 }

@@ -13,7 +13,7 @@ const Home = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:4009/api/v1/getProds");
+        const res = await axios.get("https://lcbe.onrender.com/api/v1/getProds");
         setProducts(res.data.data);
       } catch (error) {
         console.error("Error fetching products:", error);

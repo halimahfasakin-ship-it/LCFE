@@ -24,7 +24,7 @@ const Login = () => {
     onSubmit: async (values) => {
       console.log(values);
       try {
-        const response = await axios.post("http://localhost:4009/api/v1/login", values)
+        const response = await axios.post("https://lcbe.onrender.com/api/v1/login", values)
         console.log(response.data)
 
         console.log("STATUS:", response.status)

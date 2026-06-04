@@ -38,7 +38,7 @@ const Signup = () => {
         onSubmit: async (values) => {
             console.log(values);
             try {
-                const response = await axios.post("http://localhost:4009/api/v1/addUserToDB", { ...values, profileImage: image })
+                const response = await axios.post("https://lcbe.onrender.com/api/v1/addUserToDB", { ...values, profileImage: image })
                 console.log(response.data);
 
                 if (response.status == 200) {

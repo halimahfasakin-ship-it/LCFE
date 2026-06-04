@@ -8,7 +8,7 @@ const Staff = () => {
 
   const getStaffs = async () => {
     try {
-      const response = await axios.get("http://localhost:4009/api/v1/staff")
+      const response = await axios.get("https://lcbe.onrender.com/api/v1/staff")
       setStaffList(response.data.data)
     } catch (error) {
       console.error("Error fetching staff:", error)

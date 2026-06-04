@@ -24,7 +24,7 @@ const ManageProd = () => {
 
   async function getProducts() {
     try {
-      const response = await axios.get("http://localhost:4009/api/v1/getProds")
+      const response = await axios.get("https://lcbe.onrender.com/api/v1/getProds")
       setProducts(response.data.data)
     } catch (error) {
       console.log(error)
@@ -47,7 +47,7 @@ const ManageProd = () => {
   // ADD PRODUCT
   const addProduct = async () => {
     try {
-      const response = await axios.post("http://localhost:4009/api/v1/addProdToDB", { ...form, prodImage: image }, {
+      const response = await axios.post("https://lcbe.onrender.com/api/v1/addProdToDB", { ...form, prodImage: image }, {
         headers: {
           Authorization: `Bearer ${cookies.get("token")}`
         }
@@ -85,7 +85,7 @@ const ManageProd = () => {
   // DELETE PRODUCT
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`http://localhost:4009/api/v1/deleteProd/${id}`, {
+      await axios.delete(`https://lcbe.onrender.com/api/v1/deleteProd/${id}`, {
         headers: {
           Authorization: `Bearer ${cookies.get("token")}`
         }
@@ -99,7 +99,7 @@ const ManageProd = () => {
 
   const editProduct = async (id) => {
     try {
-      await axios.patch(`http://localhost:4009/api/v1/editProd/${id}`, { ...form, prodImage: image }, {
+      await axios.patch(`https://lcbe.onrender.com/api/v1/editProd/${id}`, { ...form, prodImage: image }, {
         headers: {
           Authorization: `Bearer ${cookies.get("token")}`
         }
@@ -152,7 +152,7 @@ const ManageProd = () => {
 
   const saveEdit = async () => {
     try {
-      await axios.patch(`http://localhost:4009/api/v1/editProd/${editingProductId}`, { ...form, prodImage: image }, {
+      await axios.patch(`https://lcbe.onrender.com/api/v1/editProd/${editingProductId}`, { ...form, prodImage: image }, {
         headers: {
           Authorization: `Bearer ${cookies.get("token")}`
         }

@@ -15,7 +15,7 @@ const Checkout = () => {
   const getCart = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4009/api/v1/getUserCart/${userId}`,
+        `https://lcbe.onrender.com/api/v1/getUserCart/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`

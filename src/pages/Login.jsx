@@ -65,11 +65,17 @@ const Login = () => {
     })
   })
 
+  cookies.set("firstName", response.data.data.firstName,
+    {
+      path: "/",
+      expires: new Date(decoded.exp * 1000)
+    }
+  )
+
   console.log(formik.touched);
   return (
     <div className='login-container'>
       <div className='login-card'>
-        <img className='logo' src={logo1} alt="logo" />
         <h1>Welcome Back!</h1>
 
         <div className='input-group'>

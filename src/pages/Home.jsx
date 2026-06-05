@@ -44,20 +44,20 @@ const Home = () => {
         <div className="hero-content">
           <p className="hero-tag">New Collection 2026</p>
 
-          <h1>Style that speaks before you do</h1>
+          <h1>Discover Fashion Beauty & Accessories For Every Occasion.</h1>
 
           <p className="hero-subtext">
             Discover modern essentials designed for comfort, confidence, and everyday elegance.
           </p>
 
           <div className="hero-buttons">
-            <button className="btn btn-primary">Shop Now</button>
-            <button className="btn btn-secondary">Explore</button>
+            <button className="btn btn-primary" onClick={() => navigate("/products")}>Shop Now</button>
+            <button className="btn btn-secondary" onClick={() => navigate("/products")}>Explore</button>
           </div>
         </div>
 
         <div className="hero-image">
-          <img src="" alt="Fashion showcase" />
+          <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b" alt="Fashion showcase" />
         </div>
       </section>
 

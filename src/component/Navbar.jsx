@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { useState } from 'react';
@@ -18,20 +18,27 @@ const Navbar = ({ setCartOpen }) => {
         cookies.remove('userId', { path: '/' });
         window.location.href = '/login';
     }
-    const [cartCount, setCartCount] =useState(0);
+    const [cartCount, setCartCount] = useState(0);
     const getCartCount = async () => {
         try {
-            const response = await fetch(`https://lcbe.onrender.com/api/v1/getUserCart/${cookies.get("userId")}`, {
+            const response = await fetch(`https://lcbe.onrender.com/api/v1/getUserCart/${cookies.get("userId")}`)
+            const data = await response.json()
+            const count = data.data.products.reduce((acc, item) => acc + item.quantity,0)
+             {
                 headers: {
                     Authorization: `Bearer ${cookies.get("token")}`
                 }
-            });
-            const count = response.data.data.products.reduce((acc, item) => acc + item.quantity, 0);
+            };
             setCartCount(count);
         } catch (error) {
             console.error('Error fetching cart count:', error);
         }
     };
+    useEffect(() => {
+        if (token) {
+            getCartCount();
+        }
+    }, []);
     return (
         <nav className="navbar navbar-expand-lg fixed-top custom-navbar" onClick={handleNavLinkClick}>
             <div className="container-fluid">

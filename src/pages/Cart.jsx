@@ -139,7 +139,7 @@ const Cart = () => {
 
                   <div>
                     <h3>{item.productId?.title}</h3>
-                    <p>₦{item.productId?.price?.toLocaleString()}</p>
+                    <p>₦{item.productId?.price?.toLocaleString() || 0}</p>
                     <div className="qty-controls">
                       <button onClick={() => decreaseQty(item.productId._id)}> - </button>
                       <span>{item.quantity}</span>

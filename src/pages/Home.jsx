@@ -9,6 +9,7 @@ import Cookies from 'universal-cookie'
 
 const Home = () => {
   const navigate = useNavigate()
+  console.log(product._id)
   const [products, setProducts] = useState([]);
   useEffect(() => {
     const fetchProducts = async () => {

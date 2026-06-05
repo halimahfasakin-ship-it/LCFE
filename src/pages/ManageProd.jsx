@@ -24,6 +24,7 @@ const ManageProd = () => {
 
   async function getProducts() {
     try {
+      console.log("Products:", response.data.data)
       const response = await axios.get("https://lcbe.onrender.com/api/v1/getProds")
       setProducts(response.data.data)
     } catch (error) {
@@ -222,6 +223,7 @@ const ManageProd = () => {
       <div className="product-list">
 
         {products.map(product => (
+          console.log(product.prodImage?.secure_url),
           <div className="product-item" key={product._id}>
 
             <div className="product-image-container">

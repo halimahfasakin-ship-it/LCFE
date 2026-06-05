@@ -10,7 +10,17 @@ const Cart = () => {
   const cookies = new Cookies()
   const userId = cookies.get("userId")
   const token = cookies.get("token")
+
+  if (!token) {
+    alert("Please login first")
+    navigate("/login")
+    return
+  }
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
   console.log("Cart userId:", userId)
+  console.log("TOKEN FROM COOKIE:", cookies.get("token"));
   const getCart = async () => {
 
     try {
@@ -25,8 +35,8 @@ const Cart = () => {
       )
       setCart(response.data.data)
       console.log(
-  JSON.stringify(response.data.data, null, 2)
-)
+        JSON.stringify(response.data.data, null, 2)
+      )
       setCartItems(response.data.data.products)
 
     } catch (error) {
@@ -66,7 +76,7 @@ const Cart = () => {
 
       await axios.patch(
         `https://lcbe.onrender.com/api/v1/increaseQuantity/${userId}/${productId}`
-      ,{}, {
+        , {}, {
         headers: {
           Authorization: `Bearer ${cookies.get("token")}`
         }
@@ -88,9 +98,9 @@ const Cart = () => {
 
       await axios.patch(
         `https://lcbe.onrender.com/api/v1/decreaseQuantity/${userId}/${productId}`
-      ,{}, {
+        , {}, {
         headers: {
-          Authorization: `Bearer ${cookies.get("token")}` 
+          Authorization: `Bearer ${cookies.get("token")}`
         }
       })
       getCart()
@@ -104,9 +114,9 @@ const Cart = () => {
   }
 
   const total = cart?.products?.reduce(
-  (acc, item) => acc + ((item.productId?.price || 0) * item.quantity),
-  0
-) || 0
+    (acc, item) => acc + ((item.productId?.price || 0) * item.quantity),
+    0
+  ) || 0
 
   useEffect(() => {
 
@@ -121,33 +131,33 @@ const Cart = () => {
 
       <h2>Your Cart</h2>
 
-      {!cart?.products?.length?(
-              <p>Your cart is empty</p>
-            ) : (
+      {!cart?.products?.length ? (
+        <p>Your cart is empty</p>
+      ) : (
         <>
           <div className="cart-list">
 
-              {cart?.products?.filter(item => item.productId)?.map(item => (
-                <div className="cart-item" key={item.productId._id}>
+            {cart?.products?.filter(item => item.productId)?.map(item => (
+              <div className="cart-item" key={item.productId._id}>
 
-                  <img
-                    src={item.productId?.prodImage?.secure_url}
-                    alt={item.productId?.title}
-                  />
+                <img
+                  src={item.productId?.prodImage?.secure_url}
+                  alt={item.productId?.title}
+                />
 
-                  <div>
-                    <h3>{item.productId?.title}</h3>
-                    <p>₦{item.productId?.price?.toLocaleString() || 0}</p>
-                    <div className="qty-controls">
-                      <button onClick={() => decreaseQty(item.productId._id)}> - </button>
-                      <span>{item.quantity}</span>
-                      <button onClick={() => increaseQty(item.productId._id)}> + </button>
-                    </div>
+                <div>
+                  <h3>{item.productId?.title}</h3>
+                  <p>₦{item.productId?.price?.toLocaleString() || 0}</p>
+                  <div className="qty-controls">
+                    <button onClick={() => decreaseQty(item.productId._id)}> - </button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => increaseQty(item.productId._id)}> + </button>
                   </div>
-                  <button className="remove" onClick={() => removeItem(item.productId._id)}> Remove </button>
                 </div>
-              ))}
-            </div>
+                <button className="remove" onClick={() => removeItem(item.productId._id)}> Remove </button>
+              </div>
+            ))}
+          </div>
           <div className="cart-summary">
             <h3>Total: ₦{total.toLocaleString()}</h3>
             <button className="btn btn-secondary" onClick={() => navigate("/staff")}> Proceed </button>

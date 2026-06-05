@@ -11,11 +11,20 @@ const Products = () => {
   const [products, setProducts] = useState([])
   const [searchParams] = useSearchParams()
   const category = searchParams.get('category')
+  const token = cookies.get("token")
+
+  if (!token) {
+    alert("Please login first")
+    navigate("/login")
+    return
+  } headers: {
+    Authorization: `Bearer ${token}`
+  }
   const filteredProducts = category ? products.filter(prod => prod.category.toLowerCase() === category) : products;
   const getProducts = async () => {
     try {
 
-      const response = await axios.get( "https://lcbe.onrender.com/api/v1/getProds")
+      const response = await axios.get("https://lcbe.onrender.com/api/v1/getProds")
 
       console.log(response.data)
 
@@ -59,12 +68,13 @@ const Products = () => {
     } catch (error) {
       console.log(error);
       alert("Failed to add product to cart");
-    }}
+    }
+  }
 
   return (
     <div className="products-page">
       <h2 className="page-title">All Products</h2>
-    
+
       {products.length === 0 ? (
         <p>Loading products...</p>
       ) : (
@@ -83,7 +93,7 @@ const Products = () => {
               <span className="category">{product.category}</span>
 
               <span className='cluster-1'>
-                <button className="btn-1" onClick={() =>  navigate(`/product/${product._id}`)}>View Details</button>
+                <button className="btn-1" onClick={() => navigate(`/product/${product._id}`)}>View Details</button>
                 <button className='btn-2' onClick={() => addToCart(product._id)}>Add to cart</button>
               </span>
             </div>

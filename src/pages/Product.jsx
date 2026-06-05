@@ -12,6 +12,14 @@ const Product = () => {
   const cookies = new Cookies()
   const userId = cookies.get("userId")
   const token = cookies.get("token")
+
+  if (!token) {
+    alert("Please login first")
+    navigate("/login")
+    return
+  } headers: {
+    Authorization: `Bearer ${token}`
+  }
   console.log(cookies.get("token"))
   console.log(cookies.get("userId"))
 
@@ -49,13 +57,6 @@ const Product = () => {
 
   const addToCart = async () => {
 
-    const token = cookies.get("token")
-
-    if (!token) {
-      alert("Please login first")
-      navigate("/login")
-      return
-    }
 
     try {
 

@@ -9,7 +9,6 @@ import Cookies from 'universal-cookie'
 
 const Home = () => {
   const navigate = useNavigate()
-  console.log(product._id)
   const [products, setProducts] = useState([]);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -69,14 +68,14 @@ const Home = () => {
         </div>
 
         <div className="featured-grid">
-          {products.slice(0, 4).map(product => (
-            <div className="featured-card" key={product._id}>
-              <img src={product.prodImage?.secure_url} alt={product.title} />
+          {products.slice(0, 4).map(products => (
+            <div className="featured-card" key={products[0]._id}>
+              <img src={products[0].prodImage?.secure_url} alt={products[0].title} />
 
-              <h3>{product.title}</h3>
+              <h3>{products[0].title}</h3>
               <p className="price">₦{product.price.toLocaleString()}</p>
 
-              <button className="btn-1" onClick={() => {navigate(`/product/${product._id}`)}}>View Product</button>
+              <button className="btn-1" onClick={() => {navigate(`/product/${products[0]._id}`)}}>View Product</button>
             </div>
           ))}
         </div>

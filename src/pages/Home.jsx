@@ -22,6 +22,7 @@ const Home = () => {
 
     fetchProducts();
   }, []);
+  console.log("Products:", products);
   return (
     <>
       {/* <div>
@@ -70,7 +71,7 @@ const Home = () => {
         <div className="featured-grid">
           {products.slice(0, 4).map(products => (
             <div className="featured-card" key={products[0]._id}>
-              <img src={products[0].prodImage?.secure_url} alt={products[0].title} />
+              <img src={products[0].prodImage?.secure_url} alt={products[0].title || Product} />
 
               <h3>{products[0].title}</h3>
               <p className="price">₦{product.price.toLocaleString()}</p>

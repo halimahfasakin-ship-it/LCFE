@@ -35,7 +35,12 @@ const Products = () => {
   }, [])
 
   const addToCart = async (productId) => {
-
+    const token = cookies.get("token")
+    if (!token) {
+      alert("Login Required");
+      navigate("/login")
+      return
+    }
     try {
       const response = await axios.post(
         "https://lcbe.onrender.com/api/v1/addToCart",
@@ -67,7 +72,7 @@ const Products = () => {
           {filteredProducts.map((product) => (
             <div className="product-card" key={product._id}>
 
-              <img src={product.prodImage?.secure_url} alt={product.name} />
+              <img src={product.prodImage?.secure_url} alt={product.title} />
 
               <h3>{product.title}</h3>
 

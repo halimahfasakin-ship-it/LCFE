@@ -9,6 +9,7 @@ const Cart = () => {
   const [cart, setCart] = useState(null)
   const cookies = new Cookies()
   const userId = cookies.get("userId")
+  const token = cookies.get("token")
   console.log("Cart userId:", userId)
   const getCart = async () => {
 
@@ -18,7 +19,7 @@ const Cart = () => {
         `https://lcbe.onrender.com/api/v1/getUserCart/${userId}`,
         {
           headers: {
-            Authorization: `Bearer ${cookies.get("token")}`
+            Authorization: `Bearer ${cookies.get("token") || ""}`
           }
         }
       )
@@ -102,13 +103,10 @@ const Cart = () => {
 
   }
 
-  const total = cart
-    ? cart.products.reduce(
-      (acc, item) =>
-        acc + ((item.productId?.price || 0 ) * item.quantity),
-      0
-    )
-    : 0
+  const total = cart?.products?.reduce(
+  (acc, item) => acc + ((item.productId?.price || 0) * item.quantity),
+  0
+) || 0
 
   useEffect(() => {
 
@@ -123,7 +121,7 @@ const Cart = () => {
 
       <h2>Your Cart</h2>
 
-      {!cart || cart.products.length === 0 ? (
+      {!cart?.products?.length?(
               <p>Your cart is empty</p>
             ) : (
         <>

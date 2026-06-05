@@ -22,42 +22,36 @@ const Login = () => {
     },
 
     onSubmit: async (values) => {
-      console.log(values);
       try {
-        const response = await axios.post("https://lcbe.onrender.com/api/v1/login", values)
-        console.log(response.data)
+        const response = await axios.post(
+          "https://lcbe.onrender.com/api/v1/login",
+          values
+        )
 
-        console.log("STATUS:", response.status)
+        const token = response.data.data.token
+        const decoded = jwtDecode(token)
 
-        if (response.status === 200) {
-          console.log("Inside success block")
-          console.log("Hello!!");
+        cookies.set("token", token, {
+          path: "/",
+          expires: new Date(decoded.exp * 1000)
+        })
 
-          const token = response.data.data.token
-          console.log("TOKEN VALUE:", token)
-          const decoded = jwtDecode(token)
-          cookies.set("token", token, {
-            path: "/",
-            expires: new Date(decoded.exp * 1000)
-          })
+        cookies.set("userId", decoded.id, {
+          path: "/",
+          expires: new Date(decoded.exp * 1000)
+        })
 
-          cookies.set("userId", decoded.id, {
-            path: "/",
-            expires: new Date(decoded.exp * 1000)
-          })
-          console.log("Saved token:", cookies.get("token"))
-          console.log("Saved userId:", cookies.get("userId"))
-          console.log(decoded);
-          navigate("/")
+        cookies.set("firstName", response.data.data.firstName, {
+          path: "/",
+          expires: new Date(decoded.exp * 1000)
+        })
 
-        }
+        navigate("/")
 
       } catch (error) {
-        console.log(error);
+        console.log(error)
         alert("Invalid credentials")
-
       }
-
     },
 
     validationSchema: yup.object({
@@ -65,12 +59,6 @@ const Login = () => {
     })
   })
 
-  cookies.set("firstName", response.data.data.firstName,
-    {
-      path: "/",
-      expires: new Date(decoded.exp * 1000)
-    }
-  )
 
   console.log(formik.touched);
   return (

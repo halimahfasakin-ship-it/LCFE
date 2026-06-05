@@ -222,7 +222,6 @@ const ManageProd = () => {
       <div className="product-list">
 
         {products.map(product => (
-          console.log(product.prodImage?.secure_url),
           <div className="product-item" key={product._id}>
 
             <div className="product-image-container">

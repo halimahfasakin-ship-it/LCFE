@@ -16,19 +16,20 @@ const Navbar = ({ setCartOpen }) => {
     const logout = () => {
         cookies.remove('token', { path: '/' });
         cookies.remove('userId', { path: '/' });
+        cookies.remove("firstName", { path: '/' });
         window.location.href = '/login';
     }
     const [cartCount, setCartCount] = useState(0);
     const getCartCount = async () => {
         try {
-            const response = await fetch(`https://lcbe.onrender.com/api/v1/getUserCart/${cookies.get("userId")}`)
-            const data = await response.json()
-            const count = data.data.products.reduce((acc, item) => acc + item.quantity,0)
-             {
-                headers: {
-                    Authorization: `Bearer ${cookies.get("token")}`
+            const response = await fetch(
+                `https://lcbe.onrender.com/api/v1/getUserCart/${cookies.get("userId")}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${cookies.get("token")}`
+                    }
                 }
-            };
+            )
             setCartCount(count);
         } catch (error) {
             console.error('Error fetching cart count:', error);

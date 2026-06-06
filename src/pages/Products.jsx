@@ -13,11 +13,14 @@ const Products = () => {
   const category = searchParams.get('category')
   const token = cookies.get("token")
 
-  if (!token) {
+  useEffect(() => {
+    if (!token) {
     alert("Please login first")
     navigate("/login")
     return
-  } headers: {
+  }
+  }, [token, navigate])
+   headers: {
     Authorization: `Bearer ${token}`
   }
   const filteredProducts = category ? products.filter(prod => prod.category.toLowerCase() === category) : products;

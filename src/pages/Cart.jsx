@@ -11,11 +11,13 @@ const Cart = () => {
   const userId = cookies.get("userId")
   const token = cookies.get("token")
 
-  if (!token) {
+  useEffect(() => {
+    if (!token) {
     alert("Please login first")
     navigate("/login")
     return
   }
+  }, [token, navigate])
   headers: {
     Authorization: `Bearer ${token}`
   }

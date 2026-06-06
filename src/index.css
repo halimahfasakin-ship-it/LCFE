@@ -766,7 +766,7 @@ MOBILE
     font-size: 14px;
   }
 
-  .btn-1,
+  /* .btn-1, */
   .btn-2,
   .btn-3,
   .btn-4 {
@@ -1751,8 +1751,9 @@ p {
     width: 100%;
   }
 
-  .btn-primary,
-  .btn-1 {
+  .btn-primary
+  /* .btn-1 */
+   {
     width: 100%;
   }
 }
@@ -1978,10 +1979,10 @@ p {
     flex-direction: column;
   }
 
-  .cluster-1 .btn-1,
+  /* .cluster-1 .btn-1,
   .cluster-1 .btn-2 {
     width: 100%;
-  }
+  } */
 }
 
 

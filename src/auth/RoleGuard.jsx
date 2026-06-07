@@ -1,17 +1,21 @@
+import React from 'react'
+
 const RoleGuard = ({ role }) => {
-  const cookies = new Cookies();
+    const cookies = new Cookies();
 
-  const token = cookies.get("token");
+    const token = cookies.get("token");
 
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
+    if (!token) {
+        return <Navigate to="/login" />;
+    }
 
-  const decoded = jwtDecode(token);
+    const decoded = jwtDecode(token);
 
-  if (decoded.role !== role) {
-    return <Navigate to="/" />;
-  }
+    if (decoded.role !== role) {
+        return <Navigate to="/" />;
+    }
 
-  return <Outlet />;
+    return <Outlet />;
 };
+
+export default RoleGuard

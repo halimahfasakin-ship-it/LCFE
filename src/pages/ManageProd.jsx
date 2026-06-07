@@ -10,8 +10,8 @@ const ManageProd = () => {
   const [editingId, setEditingId] = useState(null)
   // base 64
   const onFileChanged = (e) => {
+    let file = e.target.files[0];
     console.log(e.target.files[0]);
-    let file = e.target.files[0]
     let reader = new FileReader();
 
     reader.onloadend = () => {

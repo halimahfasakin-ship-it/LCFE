@@ -8,6 +8,7 @@ import { jwtDecode } from 'jwt-decode'
 import * as yup from "yup"
 
 const Signup = () => {
+  const cookies = new Cookies()
     const [image, setimage] = useState(null)
     // base 64
     const onFileChanged = (e) => {

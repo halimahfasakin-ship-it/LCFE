@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 import React from 'react'
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 
 const RoleGuard = ({ role }) => {

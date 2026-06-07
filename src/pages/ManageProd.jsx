@@ -24,9 +24,11 @@ const ManageProd = () => {
 
   async function getProducts() {
     try {
-      console.log("Products:", response.data.data)
       const response = await axios.get("https://lcbe.onrender.com/api/v1/getProds")
+      console.log("Products:", response.data.data)
       setProducts(response.data.data)
+      console.log(response.data);
+      
     } catch (error) {
       console.log(error)
     }

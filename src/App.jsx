@@ -19,6 +19,7 @@ import ManageProd from './pages/ManageProd'
 import Cart from './pages/Cart'
 import Cookies from 'universal-cookie'
 import AuthGuard from './auth/AuthGuard'
+import RoleGuard from './auth/RoleGuard'
 
 const App = () => {
   const cookies = new Cookies()

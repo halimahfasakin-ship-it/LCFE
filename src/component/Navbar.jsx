@@ -30,7 +30,7 @@ const Navbar = ({ setCartOpen }) => {
                     }
                 }
             )
-            setCartCount(count);
+            setCartCount(cartCount);
         } catch (error) {
             console.error('Error fetching cart count:', error);
         }

@@ -28,11 +28,11 @@ const App = () => {
     <div>
       <Navbar />
       <Routes>
-          <Route index element={<Home />} />
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/login' element={<Login />} />
-          <Route path="/product/:id" element={<Product />} />
-          <Route path='/products' element={<Products />} />
+        <Route index element={<Home />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
+        <Route path="/product/:id" element={<Product />} />
+        <Route path='/products' element={<Products />} />
         <Route element={<AuthGuard isAuth={isAuth} />}>
           <Route path="/product/:id" element={<Product />} />
           <Route path='/rating' element={<Rating />} />
@@ -40,10 +40,12 @@ const App = () => {
           <Route path='/staff' element={<Staff />} />
           <Route path='/staff-pref' element={<StaffPref />} />
           <Route path='/checkout' element={<Checkout />} />
-          <Route path='/admin' element={<Admin />} />
           <Route path='/staff-request' element={<StaffRequests />} />
-          <Route path='/manage-products' element={<ManageProd />} />
           <Route path='/cart' element={<Cart />} />
+        </Route>
+        <Route element={<RoleGuard role="admin" />}>
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/manage-products" element={<ManageProd />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>

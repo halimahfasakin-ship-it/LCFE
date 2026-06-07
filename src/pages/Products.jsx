@@ -14,15 +14,15 @@ const Products = () => {
   const token = cookies.get("token")
 
   useEffect(() => {
-    if (!token) {
-    alert("Please login first")
-    navigate("/login")
-    return
-  }
-  }, [token, navigate])
-   headers: {
-    Authorization: `Bearer ${token}`
-  }
+      if (!token) {
+      alert("Please login first")
+      navigate("/login")
+      return
+    }
+    }, [token, navigate])
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   const filteredProducts = category ? products.filter(prod => prod.category.toLowerCase() === category) : products;
   const getProducts = async () => {
     try {

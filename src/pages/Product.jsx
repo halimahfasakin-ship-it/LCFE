@@ -13,13 +13,16 @@ const Product = () => {
   const userId = cookies.get("userId")
   const token = cookies.get("token")
 
-  if (!token) {
-    alert("Please login first")
-    navigate("/login")
-    return
-  } headers: {
-    Authorization: `Bearer ${token}`
-  }
+  useEffect(() => {
+      if (!token) {
+      alert("Please login first")
+      navigate("/login")
+      return
+    }
+    }, [token, navigate])
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   console.log(cookies.get("token"))
   console.log(cookies.get("userId"))
 

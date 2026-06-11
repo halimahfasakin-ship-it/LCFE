@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import google from "../assets/google.png"
 import apple from "../assets/apple.png"
@@ -13,6 +13,7 @@ const Login = () => {
   const cookies = new Cookies()
   console.log(cookies.get("token"))
   console.log(cookies.get("userId"))
+  const [loading, setloading] = useState(true)
   let navigate = useNavigate()
 
   let formik = useFormik({
@@ -23,13 +24,11 @@ const Login = () => {
 
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(
-          "https://lcbe.onrender.com/api/v1/login",
-          values
-        )
-
+        const response = await axios.post( "https://lcbe.onrender.com/api/v1/login", values)
         const token = response.data.data.token
         const decoded = jwtDecode(token)
+        console.log("DECODED TOKEN:", decoded);
+        
 
         cookies.set("token", token, {
           path: "/",
@@ -46,7 +45,13 @@ const Login = () => {
           expires: new Date(decoded.exp * 1000)
         })
 
+        cookies.set("role", response.data.data.role, {
+          path: "/",
+          expires: new Date(decoded.exp * 1000)
+        })
+
         navigate("/")
+        alert("Logged in Successfully!")
 
       } catch (error) {
         console.log(error)
@@ -83,16 +88,16 @@ const Login = () => {
           Don't have an account? <Link to="/signup">Sign up</Link>
         </p>
 
-        <div className='divider'>OR</div>
+        {/* <div className='divider'>OR</div> */}
 
-        <div className='social-container'>
+        {/* <div className='social-container'>
           <button className='social-btn'>
             <img src={apple} alt="" /> Log in with Apple
           </button>
           <button className='social-btn'>
             <img src={google} alt="" /> Log in with Google
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   )

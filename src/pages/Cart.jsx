@@ -11,16 +11,7 @@ const Cart = () => {
   const userId = cookies.get("userId")
   const token = cookies.get("token")
 
-  useEffect(() => {
-    if (!token) {
-    alert("Please login first")
-    navigate("/login")
-    return
-  }
-  }, [token, navigate])
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
+
   console.log("Cart userId:", userId)
   console.log("TOKEN FROM COOKIE:", cookies.get("token"));
   const getCart = async () => {
@@ -134,7 +125,7 @@ const Cart = () => {
       <h2>Your Cart</h2>
 
       {!cart?.products?.length ? (
-        <p>Your cart is empty</p>
+        <p>Loading Cart... </p>
       ) : (
         <>
           <div className="cart-list">
@@ -162,7 +153,7 @@ const Cart = () => {
           </div>
           <div className="cart-summary">
             <h3>Total: ₦{total.toLocaleString()}</h3>
-            <button className="btn btn-secondary" onClick={() => navigate("/staff")}> Proceed </button>
+            <button className="btn btn-secondary" onClick={() => navigate("/checkout")}> Proceed </button>
           </div>
         </>
       )}

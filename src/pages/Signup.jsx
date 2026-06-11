@@ -9,69 +9,74 @@ import * as yup from "yup"
 
 const Signup = () => {
   const cookies = new Cookies()
-    const [image, setimage] = useState(null)
-    // base 64
-    const onFileChanged = (e) => {
-        console.log(e.target.files[0]);
-        let file = e.target.files[0]
-        setimage(e.target.files[0])
-        let reader = new FileReader();
+  const navigate = useNavigate()
+  const [image, setimage] = useState(null)
+  // base 64
+  const onFileChanged = (e) => {
+    const file = e.target.files[0];
 
-        reader.onloadend = () => {
-            console.log(reader.result);
-            setimage(reader.result)
+    const reader = new FileReader();
 
+    reader.onloadend = () => {
+      setimage(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  let formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      gender: "",
+      profileImage: {
+        publi_id: "",
+        secure_url: ""
+      },
+      role: "user"
+    },
+
+    onSubmit: async (values) => {
+      console.log("FINAL VALUES:", JSON.stringify(values, null, 2));
+      alert("Account created successfully! Please log in.")
+      navigate("/login")
+      try {
+        const response = await axios.post("https://lcbe.onrender.com/api/v1/addUserToDB", { ...values, profileImage: image })
+        console.log(response.data);
+
+        if (response.status === 200) {
+          alert("User created successfully!")
+          navigate("/")
         }
 
-        reader.readAsDataURL(file)
-    }
+      } catch (error) {
+        if (error.response?.status == 400) {
+          console.log(error.response.data);
+          alert("User already exists");
+          return;
+        } else {
+          console.log(error);
+          alert("Error creating user")
 
-    let formik = useFormik({
-        initialValues: {
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-            gender: "",
-            role: "user"
-        },
+        }
+      }
 
-        onSubmit: async (values) => {
-            console.log(values);
-            try {
-                const response = await axios.post("https://lcbe.onrender.com/api/v1/addUserToDB", { ...values, profileImage: image })
-                console.log(response.data);
+    },
 
-                if (response.status == 200) {
-                    alert("User created successfully!")
-                    navigate("/")
-                }
-
-            } catch (error) {
-                if (error.response == 400) {
-                    console.log(error.response.data);
-                    alert("Error creating user");
-                    return;
-                } else {
-                    console.log(error);
-                    alert("Error creating user")
-
-                }
-            }
-
-        },
-
-        validationSchema: yup.object({
-            firstName: yup.string().required("First name is required"),
-            lastName: yup.string().required("Last name is required"),
-            email: yup.string().required("Email is required").email("Invalid email format"),
-            password: yup.string().required("Password is required")
-        })
+    validationSchema: yup.object({
+      firstName: yup.string().required("First name is required"),
+      lastName: yup.string().required("Last name is required"),
+      email: yup.string().required("Email is required").email("Invalid email format"),
+      password: yup.string().required("Password is required").matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "Password too weak"),
+      gender: yup.string().required("Gender is required")
     })
+  })
 
-    // console.log(formik.values);
-    // console.log(formik.errors);
-    console.log(formik.touched);
+  // console.log(formik.values);
+  // console.log(formik.errors);
+  console.log(formik.touched);
   const [role, setRole] = useState("user")
 
   return (
@@ -81,35 +86,8 @@ const Signup = () => {
         <img className='logo' src={logo1} alt="logo" />
         <h1>Create Account</h1>
 
-        {/* Role Selection */}
-        <div className='role-box'>
-          <p className='role-title'>Sign up as:</p>
-
-          <div className='role-options' onChange={formik.handleChange} value={formik.values.role} onBlur={formik.handleBlur}>
-            <label>
-              <input
-                type="radio"
-                value="user"
-                checked={role === "user"}
-                onChange={(e) => setRole(e.target.value)}
-              />
-              User
-            </label>
-
-            <label>
-              <input
-                type="radio"
-                value="staff"
-                checked={role === "staff"}
-                onChange={(e) => setRole(e.target.value)}
-              />
-              Staff
-            </label>
-          </div>
-        </div>
-
         {/* Form */}
-        <div className='input-group'>
+        <form className='input-group'>
           <input type="file" name="" onChange={(e) => onFileChanged(e)} /><br />
           <input type="text" placeholder='First Name' name='firstName' onChange={formik.handleChange} onBlur={formik.handleBlur} />
           {(formik.touched.firstName && formik.errors.firstName) && <small className='text-danger'>{formik.errors.firstName}</small>}
@@ -119,14 +97,15 @@ const Signup = () => {
           {(formik.touched.email && formik.errors.email) && <small className='text-danger'>{formik.errors.email}</small>}
           <input type="password" placeholder='Password' name='password' onChange={formik.handleChange} onBlur={formik.handleBlur} />
           {(formik.touched.password && formik.errors.password) && <small className='text-danger'>{formik.errors.password}</small>}
-          {/* Extra field depending on role */}
+          <input type="text" placeholder='Gender' name='gender' onChange={formik.handleChange} onBlur={formik.handleBlur} />
+          {/* Extra field depending on role
           {role === "staff" && (
             <input type="text" placeholder='Staff ID / Department Code' />
-          )}
-        </div>
+          )} */}
+        </form>
 
         <button type='submit' className='login-btn' onClick={formik.handleSubmit}>
-          Create {role === "staff" ? "Staff" : "User"} Account
+          Create Account
         </button>
 
         <p className='signup-text'>

@@ -53,7 +53,8 @@ const Checkout = () => {
         {/* PRODUCT */}
         {cart?.products?.map(item => (
           <div className='summary-card' key={item.productId._id}>
-            <p>{item.productId.title}</p>
+            <h3>{item.productId.title}</h3>
+            <img src={item.prodImage?.secure_url || null} alt="" />
             <p>Qty: {item.quantity}</p>
             <p>
               ₦
@@ -64,12 +65,12 @@ const Checkout = () => {
         ))}
 
         {/* STAFF */}
-        <div className="summary-card">
+        {/* <div className="summary-card">
           <h3>Selected Staff</h3>
           <img src={selectedStaff?.profileImage?.secure_url || null} alt={selectedStaff?.firstName} />
           <p>{selectedStaff?.firstName} {selectedStaff?.lastName}</p>
           <p>⭐ {selectedStaff?.rating}</p>
-        </div>
+        </div> */}
 
       </div>
 
@@ -78,7 +79,7 @@ const Checkout = () => {
         <h3>Total: ₦{total.toLocaleString()}</h3>
       </div>
 
-      <button className="btn btn-secondary" onClick={handleConfirm}>
+      <button className="btn btn-secondary" onClick={() => navigate("/")}>
         Confirm Order
       </button>
 

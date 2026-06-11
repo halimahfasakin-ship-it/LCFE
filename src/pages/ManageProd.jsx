@@ -10,13 +10,15 @@ const ManageProd = () => {
   const [editingId, setEditingId] = useState(null)
   // base 64
   const onFileChanged = (e) => {
-    let file = e.target.files[0];
     console.log(e.target.files[0]);
+    let file = e.target.files[0]
+    setimage(e.target.files[0])
     let reader = new FileReader();
 
     reader.onloadend = () => {
       console.log(reader.result);
       setimage(reader.result)
+
     }
 
     reader.readAsDataURL(file)
@@ -28,7 +30,7 @@ const ManageProd = () => {
       console.log("Products:", response.data.data)
       setProducts(response.data.data)
       console.log(response.data);
-      
+
     } catch (error) {
       console.log(error)
     }
@@ -50,12 +52,12 @@ const ManageProd = () => {
   // ADD PRODUCT
   const addProduct = async () => {
     try {
-      const response = await axios.post("https://lcbe.onrender.com/api/v1/addProdToDB", { ...form, prodImage: image }, {
-        headers: {
-          Authorization: `Bearer ${cookies.get("token")}`
+      const response = await axios.post("https://lcbe.onrender.com/api/v1/addProdToDB", { ...form, prodImage: image },
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.get("token")}`
+          }
         }
-      },
-        console.log(cookies.get("token"))
       )
 
       alert(response.data.message)
@@ -65,7 +67,6 @@ const ManageProd = () => {
 
       setForm({
         title: "",
-        prodImage: "",
         price: "",
         category: "",
         description: "",
@@ -186,7 +187,7 @@ const ManageProd = () => {
       <h1>Product Management</h1>
 
       {/* ADD FORM */}
-      <div className="form">
+      <form className="form">
 
         <input type="file" name="" onChange={(e) => onFileChanged(e)} />
 
@@ -219,13 +220,12 @@ const ManageProd = () => {
           {editingProductId ? "Save Changes" : "Add Product"}
         </button>
 
-      </div>
+      </form>
 
       {/* PRODUCT LIST */}
       <div className="product-list">
 
         {products.map(product => (
-          console.log(product.prodImage?.secure_url),
           <div className="product-item" key={product._id}>
 
             <div className="product-image-container">

@@ -7,22 +7,24 @@ import Signup from './pages/Signup'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Products from './pages/Products'
-import Rating from './pages/Rating'
-import SelectStaff from './pages/SelectStaff'
-import Staff from './pages/Staff'
-import StaffPref from './pages/StaffPref'
+// import Rating from './pages/Rating'
+// import SelectStaff from './pages/SelectStaff'
+// import Staff from './pages/Staff'
+// import StaffPref from './pages/StaffPref'
 import Product from './pages/Product'
 import Checkout from './pages/Checkout'
 import Admin from './pages/Admin'
-import StaffRequests from './pages/StaffRequests'
+// import StaffRequests from './pages/StaffRequests'
 import ManageProd from './pages/ManageProd'
 import Cart from './pages/Cart'
 import Cookies from 'universal-cookie'
 import AuthGuard from './auth/AuthGuard'
 import RoleGuard from './auth/RoleGuard'
+// import ManageStaff from './pages/ManageStaff'
 
 const App = () => {
   const cookies = new Cookies()
+  const token = cookies.get("token")
   const isAuth = cookies.get("token")
   console.log("App token:", cookies.get("token"))
   return (
@@ -35,18 +37,21 @@ const App = () => {
         <Route path="/product/:id" element={<Product />} />
         <Route path='/products' element={<Products />} />
         <Route element={<AuthGuard isAuth={isAuth} />}>
-          <Route path="/product/:id" element={<Product />} />
-          <Route path='/rating' element={<Rating />} />
-          <Route path='/select-staff' element={<SelectStaff />} />
-          <Route path='/staff' element={<Staff />} />
-          <Route path='/staff-pref' element={<StaffPref />} />
+          {/* <Route path='/rating' element={<Rating />} /> */}
+          {/* <Route path='/select-staff' element={<SelectStaff />} /> */}
+          {/* <Route path='/staff-pref' element={<StaffPref />} /> */}
           <Route path='/checkout' element={<Checkout />} />
-          <Route path='/staff-request' element={<StaffRequests />} />
+          {/* <Route path='/staff-request' element={<StaffRequests />} /> */}
           <Route path='/cart' element={<Cart />} />
+        </Route>
+        <Route element={<RoleGuard role="user"/>}>
+          {/* <Route path='/staff' element={<Staff />} /> */}
         </Route>
         <Route element={<RoleGuard role="admin" />}>
           <Route path="/admin" element={<Admin />} />
+          {/* <Route path='/staff' element={<Staff />} /> */}
           <Route path="/manage-products" element={<ManageProd />} />
+          {/* <Route path="/manage-staff" element={<ManageStaff />} /> */}
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>

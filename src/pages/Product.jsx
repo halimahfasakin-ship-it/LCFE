@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Cookies from "universal-cookie"
+import { InfinitySpin } from 'react-loader-spinner'
 
 const Product = () => {
   const { id } = useParams()
@@ -12,51 +12,35 @@ const Product = () => {
   const cookies = new Cookies()
   const userId = cookies.get("userId")
   const token = cookies.get("token")
-
-  useEffect(() => {
-      if (!token) {
-      alert("Please login first")
-      navigate("/login")
-      return
-    }
-    }, [token, navigate])
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
   console.log(cookies.get("token"))
   console.log(cookies.get("userId"))
 
 
-
-  const getProd = async () => {
-
-    try {
-
-      console.log("Token:", token)
-      const response = await axios.get(
-        `https://lcbe.onrender.com/api/v1/getProd/${id}`,
-        {
+  useEffect(() => {
+    const getProd = async () => {
+      try {
+        console.log("Product ID:", id)
+        const response = await axios.get(`https://lcbe.onrender.com/api/v1/getProd/${id}`,
+          {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${cookies.get("token")}`
           }
         }
-      )
-
-      setProduct(response.data.data)
-      console.log(response.data.data);
-
-
-    } catch (error) {
-
-      console.log(error)
-
-    } finally {
-
-      setLoading(false)
-
+        )
+        console.log("API Response:", response.data)
+        console.log(response.data.data);
+        
+        setProduct(response.data.data)
+        setLoading(false)
+      } catch (error) {
+        console.log("Error:", error.response?.data || error)
+      }
     }
 
-  }
+    getProd()
+
+  }, [id])
+
 
   const addToCart = async () => {
 
@@ -76,8 +60,8 @@ const Product = () => {
           }
         },
 
-        console.log(response.data)
       )
+      console.log(response.data)
 
 
       alert("Product added to cart")
@@ -95,62 +79,49 @@ const Product = () => {
 
   }
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    getProd()
+  //   getProd()
 
-  }, [id])
+  // }, [id])
 
-  if (loading) {
-    return <h2 style={{ padding: "20px" }}>Loading product...</h2>
-  }
+  // if (loading) {
+  //   return <h2 style={{ padding: "20px" }}>Loading product...</h2>
+  // }
 
-  if (!product) {
-    return <h2 style={{ padding: "20px" }}>Product not found</h2>
-  }
+  // if (!product) {
+  //   return <h2 style={{ padding: "20px" }}>Product not found</h2>
+  // }
 
 
   return (
-    <div className="product-details">
-
-      <div className="product-image">
-        <img src={product?.prodImage?.secure_url} alt={product.title} />
-      </div>
-
-      <div className="product-info">
-
-        <h1>{product.title}</h1>
-
-        <p className="category">
-          Category: {product?.category}
-        </p>
-
-        <p className="price">
-          ₦{product?.price?.toLocaleString()}
-        </p>
-
-        <p className="description">
-          {product?.description}
-        </p>
-
-        <div className="actions">
-
-          <button
-            className="btn-primary"
-            onClick={() => navigate("/staff")}
-          >
-            Select Attendant
-          </button>
-
-          <button className="btn-1" onClick={addToCart}>
-            Add to Cart
-          </button>
-
+    <div className='d-flex justify-content-center align-items-center flex-wrap gap-3 mt-5'>{
+      loading ? <InfinitySpin
+        width="200"
+        color='#6c63ff'
+      /> :
+        <div className="product-details">
+          <div className="product-image">
+            <img src={product?.prodImage?.secure_url} alt={product.title} />
+          </div>
+          <div className="product-info">
+            <h1>{product.title}</h1>
+            <p className="category">
+              Category: {product?.category}
+            </p>
+            <p className="price">
+              ₦{product?.price?.toLocaleString()}
+            </p>
+            <p className="description">
+              {product?.description}
+            </p>
+            <div className="actions">
+              {/* <button className="btn-primary" onClick={() => navigate("/staff")}>Select Attendant</button> */}
+              <button className="btn-1" onClick={addToCart}>Add to Cart</button>
+            </div>
+          </div>
         </div>
-
-      </div>
-
-    </div>
+    }</div>
   )
 }
 

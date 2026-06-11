@@ -54,7 +54,7 @@ const Checkout = () => {
         {cart?.products?.map(item => (
           <div className='summary-card' key={item.productId._id}>
             <h3>{item.productId.title}</h3>
-            <img src={item.prodImage?.secure_url || null} alt="" />
+            <img src={item.productId?.prodImage?.secure_url || null} alt="" />
             <p>Qty: {item.quantity}</p>
             <p>
               ₦

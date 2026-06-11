@@ -10,19 +10,22 @@ import * as yup from "yup"
 const Signup = () => {
   const cookies = new Cookies()
   const navigate = useNavigate()
+  const [role, setRole] = useState("user")
   const [image, setimage] = useState(null)
-  // base 64
   const onFileChanged = (e) => {
-    const file = e.target.files[0];
+        console.log(e.target.files[0]);
+        let file = e.target.files[0]
+        setimage(e.target.files[0])
+        let reader = new FileReader();
 
-    const reader = new FileReader();
+        reader.onloadend = () => {
+            console.log(reader.result);
+            setimage(reader.result)
 
-    reader.onloadend = () => {
-      setimage(reader.result);
-    };
+        }
 
-    reader.readAsDataURL(file);
-  };
+        reader.readAsDataURL(file)
+    }
 
   let formik = useFormik({
     initialValues: {
@@ -31,23 +34,17 @@ const Signup = () => {
       email: "",
       password: "",
       gender: "",
-      profileImage: {
-        publi_id: "",
-        secure_url: ""
-      },
-      role: "user"
+      role: ""
     },
 
     onSubmit: async (values) => {
       console.log("FINAL VALUES:", JSON.stringify(values, null, 2));
-      alert("Account created successfully! Please log in.")
-      navigate("/login")
       try {
         const response = await axios.post("https://lcbe.onrender.com/api/v1/addUserToDB", { ...values, profileImage: image })
         console.log(response.data);
 
-        if (response.status === 200) {
-          alert("User created successfully!")
+        if (response.status === 201) {
+          alert("Account created successfully! Please log in.")
           navigate("/")
         }
 
@@ -77,7 +74,6 @@ const Signup = () => {
   // console.log(formik.values);
   // console.log(formik.errors);
   console.log(formik.touched);
-  const [role, setRole] = useState("user")
 
   return (
     <div className='login-container'>

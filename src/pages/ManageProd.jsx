@@ -15,11 +15,11 @@ const ManageProd = () => {
     setimage(e.target.files[0])
     let reader = new FileReader();
 
-    reader.onloadend = () => {
-      console.log(reader.result);
-      setimage(reader.result)
+    // reader.onloadend = () => {
+    //   console.log(reader.result);
+    //   setimage(reader.result)
 
-    }
+    // }
 
     reader.readAsDataURL(file)
   }
@@ -187,7 +187,7 @@ const ManageProd = () => {
       <h1>Product Management</h1>
 
       {/* ADD FORM */}
-      <form className="form">
+      <div className="form">
 
         <input type="file" name="" onChange={(e) => onFileChanged(e)} />
 
@@ -220,7 +220,7 @@ const ManageProd = () => {
           {editingProductId ? "Save Changes" : "Add Product"}
         </button>
 
-      </form>
+      </div>
 
       {/* PRODUCT LIST */}
       <div className="product-list">

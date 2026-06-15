@@ -13,7 +13,7 @@ const ManageProd = () => {
     const file = e.target.files[0]
     const reader = new FileReader()
     reader.onloadend = () => {
-      setImage(reader.result) // BASE64 STRING
+      setimage(reader.result) // BASE64 STRING
     }
 
     reader.readAsDataURL(file)

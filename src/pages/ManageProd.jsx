@@ -18,13 +18,17 @@ const ManageProd = () => {
     stock: 0,
   })
 
-  // HANDLE IMAGE
+  // =========================
+  // IMAGE HANDLER
+  // =========================
   const onFileChanged = (e) => {
     const file = e.target.files[0]
     setImage(file)
   }
 
+  // =========================
   // GET PRODUCTS
+  // =========================
   const getProducts = async () => {
     try {
       const res = await axios.get(
@@ -40,7 +44,9 @@ const ManageProd = () => {
     getProducts()
   }, [])
 
+  // =========================
   // RESET FORM
+  // =========================
   const resetForm = () => {
     setForm({
       title: "",
@@ -54,7 +60,9 @@ const ManageProd = () => {
     setEditingProductId(null)
   }
 
+  // =========================
   // ADD PRODUCT (FIXED)
+  // =========================
   const addProduct = async () => {
     try {
       const formData = new FormData()
@@ -82,12 +90,14 @@ const ManageProd = () => {
       getProducts()
       resetForm()
     } catch (err) {
-      console.log(err.response?.data || err)
-      alert(err.response?.data?.message || "Failed to add product")
+      console.log("ADD ERROR:", err.response?.data || err)
+      alert(err.response?.data?.message || "Add product failed")
     }
   }
 
+  // =========================
   // DELETE PRODUCT
+  // =========================
   const deleteProduct = async (id) => {
     try {
       await axios.delete(
@@ -102,11 +112,13 @@ const ManageProd = () => {
       getProducts()
     } catch (err) {
       console.log(err)
-      alert("Failed to delete product")
+      alert("Delete failed")
     }
   }
 
+  // =========================
   // START EDIT
+  // =========================
   const startEdit = (product) => {
     setForm({
       title: product.title,
@@ -121,7 +133,9 @@ const ManageProd = () => {
     setEditingProductId(product._id)
   }
 
-  // SAVE EDIT (FIXED)
+  // =========================
+  // SAVE EDIT
+  // =========================
   const saveEdit = async () => {
     try {
       const formData = new FormData()
@@ -151,11 +165,14 @@ const ManageProd = () => {
       getProducts()
       resetForm()
     } catch (err) {
-      console.log(err.response?.data || err)
-      alert("Failed to edit product")
+      console.log("EDIT ERROR:", err.response?.data || err)
+      alert("Edit failed")
     }
   }
 
+  // =========================
+  // UI
+  // =========================
   return (
     <div>
       <h1>Product Management</h1>
@@ -196,9 +213,7 @@ const ManageProd = () => {
           }
         />
 
-        <button
-          onClick={editingProductId ? saveEdit : addProduct}
-        >
+        <button onClick={editingProductId ? saveEdit : addProduct}>
           {editingProductId ? "Save Changes" : "Add Product"}
         </button>
       </div>
@@ -206,10 +221,11 @@ const ManageProd = () => {
       {/* PRODUCT LIST */}
       <div className="product-list">
         {products.map((product) => (
-          <div key={product._id} className="product-item">
+          <div key={product._id}>
             <img
               src={product.prodImage?.secure_url}
               alt={product.title}
+              width="100"
             />
 
             <h3>{product.title}</h3>

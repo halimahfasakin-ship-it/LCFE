@@ -47,179 +47,180 @@ const Checkout = () => {
   return (
     <div className="checkout-page">
 
-  <div className="checkout-wrapper">
+      <div className="checkout-wrapper">
 
-    {/* LEFT SECTION */}
-    <div className="checkout-form-card">
+        {/* LEFT SECTION */}
+        <div className="checkout-form-card">
 
-      <h2>Shipping Information</h2>
+          <h2>Shipping Information</h2>
 
-      <form className="shipping-form">
+          <form className="shipping-form">
 
-        <div className="form-group">
-          <label>Full Name</label>
-          <input
-            type="text"
-            placeholder="Enter your full name"
-          />
+            <div className="form-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                placeholder="Enter your full name"
+              />
+            </div>
+
+            <div className="form-row">
+
+              <div className="form-group">
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  placeholder="johndoe@gmail.com"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Phone Number</label>
+                <input
+                  type="text"
+                  placeholder="+234..."
+                />
+              </div>
+
+            </div>
+
+            <div className="form-group">
+              <label>Address</label>
+              <input
+                type="text"
+                placeholder="Street address"
+              />
+            </div>
+
+            <div className="form-row">
+
+              <div className="form-group">
+                <label>City</label>
+                <input
+                  type="text"
+                  placeholder="Lagos"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>State</label>
+                <input
+                  type="text"
+                  placeholder="Lagos State"
+                />
+              </div>
+
+            </div>
+
+          </form>
         </div>
+        <div className="products-card">
+          <div className="products-section">
 
-        <div className="form-row">
+            <h2>Your Items</h2>
 
-          <div className="form-group">
-            <label>Email Address</label>
-            <input
-              type="email"
-              placeholder="johndoe@gmail.com"
-            />
+            {cart?.products?.map((item) => (
+              <div
+                className="checkout-product"
+                key={item.productId._id}
+              >
+
+                <img
+                  src={item.productId?.prodImage?.secure_url}
+                  alt={item.productId.title}
+                />
+
+                <div className="checkout-product-info">
+                  <h4>{item.productId.title}</h4>
+                  <p>Qty: {item.quantity}</p>
+                </div>
+
+                <div className="checkout-price">
+                  ₦{(
+                    item.productId.price * item.quantity
+                  ).toLocaleString()}
+                </div>
+
+              </div>
+            ))}
+
           </div>
 
-          <div className="form-group">
-            <label>Phone Number</label>
-            <input
-              type="text"
-              placeholder="+234..."
-            />
-          </div>
-
         </div>
 
-        <div className="form-group">
-          <label>Address</label>
-          <input
-            type="text"
-            placeholder="Street address"
-          />
-        </div>
+        {/* RIGHT SECTION */}
+        <div className="checkout-summary-card">
 
-        <div className="form-row">
-
-          <div className="form-group">
-            <label>City</label>
-            <input
-              type="text"
-              placeholder="Lagos"
-            />
+          <div className="summary-header">
+            <h2>Order Summary</h2>
+            <span>{cart?.products?.length || 0} items</span>
           </div>
 
-          <div className="form-group">
-            <label>State</label>
-            <input
-              type="text"
-              placeholder="Lagos State"
-            />
+          <div className="summary-body">
+
+            {cart?.products?.map((item) => (
+              <div
+                className="summary-product"
+                key={item.productId._id}
+              >
+                <span>
+                  {item.productId.title}
+                  <small> × {item.quantity}</small>
+                </span>
+
+                <span>
+                  ₦{(
+                    item.productId.price *
+                    item.quantity
+                  ).toLocaleString()}
+                </span>
+              </div>
+            ))}
+
+            <div className="summary-divider"></div>
+
+            <div className="summary-row">
+              <span>Subtotal</span>
+              <span>₦{total.toLocaleString()}</span>
+            </div>
+
+            <div className="summary-row">
+              <span>Shipping</span>
+              <span className="free">Free</span>
+            </div>
+
+            <div className="summary-row">
+              <span>Tax</span>
+              <span>₦0</span>
+            </div>
+
+            <div className="summary-divider"></div>
+
+            <div className="summary-total">
+              <span>Total</span>
+              <span>₦{total.toLocaleString()}</span>
+            </div>
+
           </div>
 
-        </div>
-
-      </form>
-
-      <div className="products-section">
-
-        <h2>Your Items</h2>
-
-        {cart?.products?.map((item) => (
-          <div
-            className="checkout-product"
-            key={item.productId._id}
+          <button
+            className="place-order-btn"
+            onClick={handleConfirm}
           >
+            Place Order
+          </button>
 
-            <img
-              src={item.productId?.prodImage?.secure_url}
-              alt={item.productId.title}
-            />
+          <p className="secure-checkout">
+            Secure Checkout
+          </p>
 
-            <div className="checkout-product-info">
-              <h4>{item.productId.title}</h4>
-              <p>Qty: {item.quantity}</p>
-            </div>
-
-            <div className="checkout-price">
-              ₦{(
-                item.productId.price * item.quantity
-              ).toLocaleString()}
-            </div>
-
-          </div>
-        ))}
+        </div>
 
       </div>
 
+      <Footer />
+
     </div>
-
-    {/* RIGHT SECTION */}
-    <div className="checkout-summary-card">
-
-  <div className="summary-header">
-    <h2>Order Summary</h2>
-    <span>{cart?.products?.length || 0} items</span>
-  </div>
-
-  <div className="summary-body">
-
-    {cart?.products?.map((item) => (
-      <div
-        className="summary-product"
-        key={item.productId._id}
-      >
-        <span>
-          {item.productId.title}
-          <small> × {item.quantity}</small>
-        </span>
-
-        <span>
-          ₦{(
-            item.productId.price *
-            item.quantity
-          ).toLocaleString()}
-        </span>
-      </div>
-    ))}
-
-    <div className="summary-divider"></div>
-
-    <div className="summary-row">
-      <span>Subtotal</span>
-      <span>₦{total.toLocaleString()}</span>
-    </div>
-
-    <div className="summary-row">
-      <span>Shipping</span>
-      <span className="free">Free</span>
-    </div>
-
-    <div className="summary-row">
-      <span>Tax</span>
-      <span>₦0</span>
-    </div>
-
-    <div className="summary-divider"></div>
-
-    <div className="summary-total">
-      <span>Total</span>
-      <span>₦{total.toLocaleString()}</span>
-    </div>
-
-  </div>
-
-  <button
-    className="place-order-btn"
-    onClick={handleConfirm}
-  >
-    Place Order
-  </button>
-
-  <p className="secure-checkout">
-    🔒 Secure Checkout
-  </p>
-
-</div>
-
-  </div>
-
-  <Footer />
-
-</div>
   )
 }
 

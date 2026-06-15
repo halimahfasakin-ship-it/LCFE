@@ -456,6 +456,8 @@ CATEGORIES
 
 .one{
 padding:100px 8%;
+display: flex;
+flex-wrap: wrap;
 }
 
 .browse{

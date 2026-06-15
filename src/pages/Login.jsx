@@ -11,8 +11,6 @@ import axios from 'axios'
 
 const Login = () => {
   const cookies = new Cookies()
-  console.log(cookies.get("token"))
-  console.log(cookies.get("userId"))
   const [loading, setloading] = useState(false)
   let navigate = useNavigate()
 
@@ -28,7 +26,6 @@ const Login = () => {
         const response = await axios.post("https://lcbe.onrender.com/api/v1/login", values)
         const token = response.data.data.token
         const decoded = jwtDecode(token)
-        console.log("DECODED TOKEN:", decoded);
         
 
         cookies.set("token", token, {

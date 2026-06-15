@@ -12,14 +12,11 @@ const Product = () => {
   const cookies = new Cookies()
   const userId = cookies.get("userId")
   const token = cookies.get("token")
-  console.log(cookies.get("token"))
-  console.log(cookies.get("userId"))
 
 
   useEffect(() => {
     const getProd = async () => {
       try {
-        console.log("Product ID:", id)
         const response = await axios.get(`https://lcbe.onrender.com/api/v1/getProd/${id}`,
           {
           headers: {
@@ -27,7 +24,6 @@ const Product = () => {
           }
         }
         )
-        console.log("API Response:", response.data)
         console.log(response.data.data);
         
         setProduct(response.data.data)

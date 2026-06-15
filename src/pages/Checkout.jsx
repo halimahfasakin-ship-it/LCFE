@@ -8,8 +8,6 @@ const Checkout = () => {
   const cookies = new Cookies()
   const userId = cookies.get("userId")
   const token = cookies.get("token")
-  console.log("userId:", cookies.get("userId"))
-  console.log("token:", cookies.get("token"))
 
   const [cart, setCart] = useState(null)
   const [formData, setFormData] = useState({

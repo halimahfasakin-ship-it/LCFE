@@ -12,8 +12,6 @@ const Cart = () => {
   const token = cookies.get("token")
 
 
-  console.log("Cart userId:", userId)
-  console.log("TOKEN FROM COOKIE:", cookies.get("token"));
   const getCart = async () => {
 
     try {

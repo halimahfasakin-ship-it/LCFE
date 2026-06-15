@@ -26,7 +26,6 @@ const App = () => {
   const cookies = new Cookies()
   const token = cookies.get("token")
   const isAuth = cookies.get("token")
-  console.log("App token:", cookies.get("token"))
   return (
     <div>
       <Navbar />

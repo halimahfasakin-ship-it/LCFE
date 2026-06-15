@@ -85,7 +85,7 @@ const Checkout = () => {
     try {
       const response = await axios.post(
         "https://lcbe.onrender.com/api/v1/initialize-payment",
-        { deliveryAddress },
+        { email: formData.email },
         {
           headers: {
             Authorization: `Bearer ${token}`

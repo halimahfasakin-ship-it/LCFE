@@ -1,5 +1,5 @@
 import React from 'react'
-import logo1 from "../assets/logo1.png"
+import logo from "../assets/logo.png"
 
 const Footer = () => {
   return (
@@ -36,7 +36,7 @@ const Footer = () => {
         <hr />
         <div className='quiet'>
           <div className='mine'>
-            <a href=""><img src={logo1} alt="" />
+            <a href=""><img src={logo} alt="" />
             <span>LEEMAH'S COLLECTION</span></a>
           </div>
           <div className='good'>

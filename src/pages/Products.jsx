@@ -70,6 +70,7 @@ const Products = () => {
         }
       );
       alert(response.data.message);
+      window.location.reload()
     } catch (error) {
       console.log(error);
       alert("Failed to add product to cart");

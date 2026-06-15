@@ -65,6 +65,7 @@ const Product = () => {
 
 
       alert("Product added to cart")
+      window.location.reload()
 
     } catch (error) {
 

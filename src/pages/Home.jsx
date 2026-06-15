@@ -88,7 +88,7 @@ const Home = () => {
         <div className="testimonial-wrapper">
 
           <div className="testimonial-card">
-            <div className="logo">© LOGO</div>
+            <div className="logo"><img className='logo' src={logo1} alt="logo" /></div>
 
             <div className="quote">
               <span className="quote-icon">“</span>

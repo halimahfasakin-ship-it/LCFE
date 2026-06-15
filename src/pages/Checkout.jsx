@@ -75,11 +75,6 @@ const Checkout = () => {
       return
     }
 
-    if (!import.meta.env.VITE_PAYSTACK_PUBLIC_KEY) {
-      setMessage("Paystack public key is not configured.")
-      return
-    }
-
     setLoading(true)
     setMessage("")
 
@@ -100,7 +95,7 @@ const Checkout = () => {
       const paystack = await loadPaystackScript()
 
       const handler = paystack.setup({
-        key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+        key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "",
         email: formData.email,
         amount: total * 100,
         ref: paystackData.reference,

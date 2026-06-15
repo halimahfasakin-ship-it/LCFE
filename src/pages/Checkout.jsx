@@ -61,80 +61,80 @@ const Checkout = () => {
     }
   }, [userId])
 
-  const handleConfirm = async () => {
-    if (!formData.fullName || !formData.email || !formData.address || !formData.city || !formData.state) {
-      setMessage("Please complete all shipping fields before placing your order.")
-      return
-    }
+  // const handleConfirm = async () => {
+  //   if (!formData.fullName || !formData.email || !formData.address || !formData.city || !formData.state) {
+  //     setMessage("Please complete all shipping fields before placing your order.")
+  //     return
+  //   }
 
-    if (!cart?.products?.length) {
-      setMessage("Your cart is empty.")
-      return
-    }
+  //   if (!cart?.products?.length) {
+  //     setMessage("Your cart is empty.")
+  //     return
+  //   }
 
-    if (!token) {
-      setMessage("Login is required to complete checkout.")
-      return
-    }
+  //   if (!token) {
+  //     setMessage("Login is required to complete checkout.")
+  //     return
+  //   }
 
-    setLoading(true)
-    setMessage("")
+  //   setLoading(true)
+  //   setMessage("")
 
-    const deliveryAddress = `${formData.address}, ${formData.city}, ${formData.state}`
+  //   const deliveryAddress = `${formData.address}, ${formData.city}, ${formData.state}`
 
-    try {
-      const response = await axios.post(
-        "https://lcbe.onrender.com/api/v1/initialize-payment",
-        { deliveryAddress },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+  //   try {
+  //     const response = await axios.post(
+  //       "https://lcbe.onrender.com/api/v1/initialize-payment",
+  //       { deliveryAddress },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       }
+  //     )
 
-      const paystackData = response.data.data
-      const paystack = await loadPaystackScript()
+  //     const paystackData = response.data.data
+  //     const paystack = await loadPaystackScript()
 
-      const handler = paystack.setup({
-        key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "",
-        email: formData.email,
-        amount: total * 100,
-        ref: paystackData.reference,
-        onClose: () => {
-          setMessage("Payment window closed before completion.")
-        },
-        callback: async (res) => {
-          try {
-            setMessage("Verifying payment...")
-            const verifyResponse = await axios.post(
-              "https://lcbe.onrender.com/api/v1/verify-payment",
-              {
-                reference: res.reference,
-                deliveryAddress
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`
-                }
-              }
-            )
+  //     const handler = paystack.setup({
+  //       key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "",
+  //       email: formData.email,
+  //       amount: total * 100,
+  //       ref: paystackData.reference,
+  //       onClose: () => {
+  //         setMessage("Payment window closed before completion.")
+  //       },
+  //       callback: async (res) => {
+  //         try {
+  //           setMessage("Verifying payment...")
+  //           const verifyResponse = await axios.post(
+  //             "https://lcbe.onrender.com/api/v1/verify-payment",
+  //             {
+  //               reference: res.reference,
+  //               deliveryAddress
+  //             },
+  //             {
+  //               headers: {
+  //                 Authorization: `Bearer ${token}`
+  //               }
+  //             }
+  //           )
 
-            setMessage("Payment successful! Order created.")
-            console.log("Order created:", verifyResponse.data.data)
-          } catch (err) {
-            console.error(err)
-            setMessage("Payment succeeded but verification failed. Please contact support.")
-          }
-        }
-      })
+  //           setMessage("Payment successful! Order created.")
+  //           console.log("Order created:", verifyResponse.data.data)
+  //         } catch (err) {
+  //           console.error(err)
+  //           setMessage("Payment succeeded but verification failed. Please contact support.")
+  //         }
+  //       }
+  //     })
 
-      handler.openIframe()
-    } catch (error) {
-      console.error(error)
-      setMessage("Unable to complete checkout at this time. Please try again.")
-    }
-  }
+  //     handler.openIframe()
+  //   } catch (error) {
+  //     console.error(error)
+  //     setMessage("Unable to complete checkout at this time. Please try again.")
+  //   }
+  // }
 
   const selectedStaff = JSON.parse(localStorage.getItem("selectedStaff"))
 

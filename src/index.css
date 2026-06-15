@@ -2545,51 +2545,120 @@ p {
 /* RIGHT SIDE */
 
 .checkout-summary-card {
-  background: white;
-  padding: 30px;
+  background: var(--surface);
   border-radius: 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  padding: 28px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
   position: sticky;
   top: 20px;
 }
 
-.checkout-summary-card h2 {
+/* HEADER */
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 25px;
 }
 
-.summary-line {
+.summary-header h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.3rem;
+}
+
+.summary-header span {
+  background: rgba(108,99,255,0.1);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* PRODUCT BREAKDOWN */
+
+.summary-product {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 18px;
+  gap: 15px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.summary-product span:first-child {
+  color: var(--muted);
+  flex: 1;
+}
+
+.summary-product small {
+  color: var(--primary);
+}
+
+.summary-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0;
+}
+
+/* PRICE ROWS */
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
   color: var(--muted);
 }
 
-.total-line {
-  border-top: 1px solid var(--border);
-  padding-top: 20px;
-  margin-top: 20px;
-  color: var(--text);
-  font-size: 1.15rem;
-  font-weight: 700;
+.free {
+  color: var(--success);
+  font-weight: 600;
 }
+
+/* TOTAL */
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* BUTTON */
 
 .place-order-btn {
   width: 100%;
-  margin-top: 30px;
   height: 55px;
+  margin-top: 25px;
   border: none;
   border-radius: 14px;
-  background: var(--primary);
+  background: linear-gradient(
+    135deg,
+    var(--primary),
+    var(--primary-light)
+  );
   color: white;
-  font-size: 15px;
   font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
   transition: .3s;
 }
 
 .place-order-btn:hover {
   transform: translateY(-2px);
-  background: var(--primary-light);
+}
+
+/* FOOTER TEXT */
+
+.secure-checkout {
+  text-align: center;
+  margin-top: 15px;
+  color: var(--muted);
+  font-size: 13px;
 }
 
 /* MOBILE */

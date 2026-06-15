@@ -150,31 +150,70 @@ const Checkout = () => {
     {/* RIGHT SECTION */}
     <div className="checkout-summary-card">
 
-      <h2>Order Summary</h2>
+  <div className="summary-header">
+    <h2>Order Summary</h2>
+    <span>{cart?.products?.length || 0} items</span>
+  </div>
 
-      <div className="summary-line">
-        <span>Subtotal</span>
-        <span>₦{total.toLocaleString()}</span>
-      </div>
+  <div className="summary-body">
 
-      <div className="summary-line">
-        <span>Delivery Fee</span>
-        <span>Free</span>
-      </div>
-
-      <div className="summary-line total-line">
-        <span>Total</span>
-        <span>₦{total.toLocaleString()}</span>
-      </div>
-
-      <button
-        className="place-order-btn"
-        onClick={handleConfirm}
+    {cart?.products?.map((item) => (
+      <div
+        className="summary-product"
+        key={item.productId._id}
       >
-        Place Order
-      </button>
+        <span>
+          {item.productId.title}
+          <small> × {item.quantity}</small>
+        </span>
 
+        <span>
+          ₦{(
+            item.productId.price *
+            item.quantity
+          ).toLocaleString()}
+        </span>
+      </div>
+    ))}
+
+    <div className="summary-divider"></div>
+
+    <div className="summary-row">
+      <span>Subtotal</span>
+      <span>₦{total.toLocaleString()}</span>
     </div>
+
+    <div className="summary-row">
+      <span>Shipping</span>
+      <span className="free">Free</span>
+    </div>
+
+    <div className="summary-row">
+      <span>Tax</span>
+      <span>₦0</span>
+    </div>
+
+    <div className="summary-divider"></div>
+
+    <div className="summary-total">
+      <span>Total</span>
+      <span>₦{total.toLocaleString()}</span>
+    </div>
+
+  </div>
+
+  <button
+    className="place-order-btn"
+    onClick={handleConfirm}
+  >
+    Place Order
+  </button>
+
+  <p className="secure-checkout">
+    🔒 Secure Checkout
+  </p>
+
+</div>
 
   </div>
 

@@ -78,7 +78,7 @@ const Signup = () => {
   // console.log(formik.values);
   // console.log(formik.errors);
   console.log(formik.touched);
-  const [role, setRole] = useState("user")
+  // const [role, setRole] = useState("user")
 
   return (
     <div className='login-container'>

@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'universal-cookie'
+import Footer from '../component/Footer'
 
 const Checkout = () => {
   const navigate = useNavigate()
@@ -44,47 +45,103 @@ const Checkout = () => {
   const total = cart?.products?.reduce((sum, item) => sum + item.productId.price * item.quantity, 0) || 0
 
   return (
-    <div className="checkout-page">
+  <div className="checkout-page">
 
-      <h2>Order Summary</h2>
+    <h1 className="checkout-title">Checkout</h1>
 
-      <div className="checkout-container">
+    <div className="checkout-layout">
 
-        {/* PRODUCT */}
-        {cart?.products?.map(item => (
-          <div className='summary-card' key={item.productId._id}>
-            <h3>{item.productId.title}</h3>
-            <img src={item.productId?.prodImage?.secure_url || null} alt="" />
-            <p>Qty: {item.quantity}</p>
-            <p>
-              ₦
-              {(item.productId.price * item.quantity)
-                .toLocaleString()}
-            </p>
+      {/* LEFT SIDE */}
+      <div className="checkout-left">
+
+        {/* SHIPPING DETAILS */}
+        <div className="checkout-card">
+          <h2>Shipping Details</h2>
+
+          <div className="shipping-info">
+            <p><strong>Name:</strong> John Doe</p>
+            <p><strong>Email:</strong> johndoe@gmail.com</p>
+            <p><strong>Phone:</strong> +234 812 345 6789</p>
+            <p><strong>Address:</strong> 123 Main Street, Lagos</p>
           </div>
-        ))}
+        </div>
 
-        {/* STAFF */}
-        {/* <div className="summary-card">
-          <h3>Selected Staff</h3>
-          <img src={selectedStaff?.profileImage?.secure_url || null} alt={selectedStaff?.firstName} />
-          <p>{selectedStaff?.firstName} {selectedStaff?.lastName}</p>
-          <p>⭐ {selectedStaff?.rating}</p>
-        </div> */}
+        {/* ORDER ITEMS */}
+        <div className="checkout-card">
+          <h2>Order Items</h2>
+
+          <div className="product-list">
+            {cart?.products?.map((item) => (
+              <div className="product-item" key={item.productId._id}>
+
+                <img
+                  src={item.productId?.prodImage?.secure_url}
+                  alt={item.productId.title}
+                />
+
+                <div className="product-details">
+                  <h4>{item.productId.title}</h4>
+                  <p>Quantity: {item.quantity}</p>
+                  <p>
+                    ₦
+                    {(item.productId.price * item.quantity)
+                      .toLocaleString()}
+                  </p>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        </div>
 
       </div>
 
-      {/* TOTAL */}
-      <div className="total">
-        <h3>Total: ₦{total.toLocaleString()}</h3>
-      </div>
+      {/* RIGHT SIDE */}
+      <div className="checkout-right">
 
-      <button className="btn btn-secondary" onClick={() => navigate("/")}>
-        Confirm Order
-      </button>
+        <div className="summary-box">
+
+          <h2>Order Summary</h2>
+
+          <div className="summary-row">
+            <span>Items</span>
+            <span>{cart?.products?.length || 0}</span>
+          </div>
+
+          <div className="summary-row">
+            <span>Delivery</span>
+            <span>Free</span>
+          </div>
+
+          <div className="summary-row total-row">
+            <span>Total</span>
+            <span>₦{total.toLocaleString()}</span>
+          </div>
+
+          <button
+            className="confirm-btn"
+            onClick={handleConfirm}
+          >
+            Confirm Order
+          </button>
+
+          <button
+            className="continue-btn"
+            onClick={() => navigate("/")}
+          >
+            Continue Shopping
+          </button>
+
+        </div>
+
+      </div>
 
     </div>
-  )
+
+    <Footer />
+
+  </div>
+)
 }
 
 export default Checkout

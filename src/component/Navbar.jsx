@@ -146,8 +146,9 @@ const Navbar = ({ setCartOpen }) => {
                             </>
                         ) : (
                             <>
-                                <div className="profile-avatar" onClick={() => setOpenProfile(!openProfile)}>
-                                    <img src={user.profileImage?.secure_url || "/default-avatar.png"} alt="profile" className="profile-img"/>
+                                <div className="profile-avatar"
+                                    onClick={() => setOpenProfile(!openProfile)}>
+                                    {user.firstName?.charAt(0).toUpperCase()}
                                 </div>
                                 {openProfile && (
                                     <div className="profile-dropdown">

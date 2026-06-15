@@ -46,7 +46,7 @@ const Signup = () => {
         console.log(response.data);
 
         if (response.status === 201) {
-          alert("Account created successfully! Please log in.")
+          alert("Account created successfully!")
           navigate("/")
         }
 

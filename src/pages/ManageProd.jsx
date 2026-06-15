@@ -1,13 +1,38 @@
-import axios from "axios"
-import React, { useState, useEffect } from "react"
+import axios from 'axios'
+import React, { useState, useEffect } from 'react'
 import Cookies from "universal-cookie"
 
 const ManageProd = () => {
   const cookies = new Cookies()
-
   const [products, setProducts] = useState([])
-  const [image, setImage] = useState(null)
+  const [image, setimage] = useState(null)
   const [editingProductId, setEditingProductId] = useState(null)
+  const [editingId, setEditingId] = useState(null)
+  // base 64
+  const onFileChanged = (e) => {
+    const file = e.target.files[0]
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setImage(reader.result) // BASE64 STRING
+    }
+
+    reader.readAsDataURL(file)
+  }
+
+  async function getProducts() {
+    try {
+      const response = await axios.get("https://lcbe.onrender.com/api/v1/getProds")
+      console.log("Products:", response.data.data)
+      setProducts(response.data.data)
+      console.log(response.data);
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getProducts()
+  }, [])
 
   const [form, setForm] = useState({
     title: "",
@@ -15,73 +40,22 @@ const ManageProd = () => {
     category: "",
     description: "",
     quantity: 1,
-    stock: 0,
+    stock: 0
   })
 
-  // =========================
-  // IMAGE HANDLER
-  // =========================
-  const onFileChanged = (e) => {
-    const file = e.target.files[0]
-    setImage(file)
-  }
 
-  // =========================
-  // GET PRODUCTS
-  // =========================
-  const getProducts = async () => {
-    try {
-      const res = await axios.get(
-        "https://lcbe.onrender.com/api/v1/getProds"
-      )
-      setProducts(res.data.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  useEffect(() => {
-    getProducts()
-  }, [])
-
-  // =========================
-  // RESET FORM
-  // =========================
-  const resetForm = () => {
-    setForm({
-      title: "",
-      price: "",
-      category: "",
-      description: "",
-      quantity: 1,
-      stock: 0,
-    })
-    setImage(null)
-    setEditingProductId(null)
-  }
-
-  // =========================
-  // ADD PRODUCT (FIXED)
-  // =========================
+  // ADD PRODUCT
   const addProduct = async () => {
     try {
-      const formData = new FormData()
-
-      formData.append("title", form.title)
-      formData.append("price", form.price)
-      formData.append("category", form.category)
-      formData.append("description", form.description)
-      formData.append("quantity", form.quantity)
-      formData.append("stock", form.stock)
-      formData.append("prodImage", image)
-
       const res = await axios.post(
         "https://lcbe.onrender.com/api/v1/addProdToDB",
-        formData,
+        {
+          ...form,
+          prodImage: image, // BASE64 STRING
+        },
         {
           headers: {
             Authorization: `Bearer ${cookies.get("token")}`,
-            "Content-Type": "multipart/form-data",
           },
         }
       )
@@ -90,35 +64,49 @@ const ManageProd = () => {
       getProducts()
       resetForm()
     } catch (err) {
-      console.log("ADD ERROR:", err.response?.data || err)
-      alert(err.response?.data?.message || "Add product failed")
+      console.log(err.response?.data || err)
+      alert(err.response?.data?.message || "Failed to add product")
     }
   }
 
-  // =========================
   // DELETE PRODUCT
-  // =========================
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(
-        `https://lcbe.onrender.com/api/v1/deleteProd/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.get("token")}`,
-          },
+      await axios.delete(`https://lcbe.onrender.com/api/v1/deleteProd/${id}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.get("token")}`
         }
-      )
-
+      })
       getProducts()
-    } catch (err) {
-      console.log(err)
-      alert("Delete failed")
+    } catch (error) {
+      console.log(error)
+      alert("Failed to delete product")
     }
   }
 
-  // =========================
-  // START EDIT
-  // =========================
+  const editProduct = async (id) => {
+    try {
+      await axios.patch(`https://lcbe.onrender.com/api/v1/editProd/${id}`, { ...form, prodImage: image }, {
+        headers: {
+          Authorization: `Bearer ${cookies.get("token")}`
+        }
+      })
+      getProducts();
+      setEditingProductId(null);
+      setForm({
+        title: "",
+        price: "",
+        category: "",
+        description: "",
+        quantity: 1,
+        stock: 0
+      })
+    } catch (error) {
+      console.log(error)
+      alert("Failed to edit product")
+    }
+  }
+
   const startEdit = (product) => {
     setForm({
       title: product.title,
@@ -126,38 +114,40 @@ const ManageProd = () => {
       category: product.category,
       description: product.description,
       quantity: product.quantity,
-      stock: product.stock,
+      stock: product.stock
     })
-
-    setImage(null)
+    setimage(product.prodImage)
     setEditingProductId(product._id)
   }
 
-  // =========================
-  // SAVE EDIT
-  // =========================
+  const resetForm = () => {
+    setForm({
+      title: "",
+      price: "",
+      category: "",
+      description: "",
+      quantity: 1,
+      stock: 0
+    })
+    setimage(null)
+  }
+
+  const cancelEdit = () => {
+    resetForm()
+    setEditingProductId(null)
+  }
+
   const saveEdit = async () => {
     try {
-      const formData = new FormData()
-
-      formData.append("title", form.title)
-      formData.append("price", form.price)
-      formData.append("category", form.category)
-      formData.append("description", form.description)
-      formData.append("quantity", form.quantity)
-      formData.append("stock", form.stock)
-
-      if (image) {
-        formData.append("prodImage", image)
-      }
-
       await axios.patch(
         `https://lcbe.onrender.com/api/v1/editProd/${editingProductId}`,
-        formData,
+        {
+          ...form,
+          prodImage: image,
+        },
         {
           headers: {
             Authorization: `Bearer ${cookies.get("token")}`,
-            "Content-Type": "multipart/form-data",
           },
         }
       )
@@ -165,86 +155,118 @@ const ManageProd = () => {
       getProducts()
       resetForm()
     } catch (err) {
-      console.log("EDIT ERROR:", err.response?.data || err)
+      console.log(err.response?.data || err)
       alert("Edit failed")
     }
   }
 
-  // =========================
-  // UI
-  // =========================
+  // const onFileChanged = (e) => {
+  //   const file = e.target.files[0]
+  //   const formData = new FormData()
+  //   formData.append("file", file)
+  //   formData.append("upload_preset", "lcReact")
+  //   axios.post("https://api.cloudinary.com/v1_1/dlqj8y7s9/image/upload", formData)
+  //     .then(res => {
+  //       setForm({ ...form, prodImage: res.data.secure_url })
+  //     })
+  // }
+
   return (
-    <div>
+    <div className="crud-page">
+
       <h1>Product Management</h1>
 
-      {/* FORM */}
+      {/* ADD FORM */}
       <div className="form">
-        <input type="file" onChange={onFileChanged} />
+
+        <input type="file" name="" onChange={(e) => onFileChanged(e)} />
 
         <input
           placeholder="Product Name"
           value={form.title}
-          onChange={(e) =>
-            setForm({ ...form, title: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, title: e.target.value })}
         />
 
         <input
           placeholder="Price"
           value={form.price}
-          onChange={(e) =>
-            setForm({ ...form, price: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, price: e.target.value })}
         />
 
         <input
           placeholder="Category"
           value={form.category}
-          onChange={(e) =>
-            setForm({ ...form, category: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
         />
 
         <input
+          className="description-input"
           placeholder="Description"
           value={form.description}
-          onChange={(e) =>
-            setForm({ ...form, description: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
 
-        <button onClick={editingProductId ? saveEdit : addProduct}>
+        <button className="btn btn-secondary" onClick={editingProductId ? () => saveEdit() : addProduct}>
           {editingProductId ? "Save Changes" : "Add Product"}
         </button>
+
       </div>
 
       {/* PRODUCT LIST */}
       <div className="product-list">
-        {products.map((product) => (
-          <div key={product._id}>
-            <img
-              src={product.prodImage?.secure_url}
-              alt={product.title}
-              width="100"
-            />
 
-            <h3>{product.title}</h3>
-            <p>₦{product.price}</p>
-            <p>{product.category}</p>
-            <p>{product.description}</p>
+        {products.map(product => (
+          <div className="product-item" key={product._id}>
 
-            <button onClick={() => startEdit(product)}>
-              Edit
-            </button>
+            <div className="product-image-container">
+              <img
+                src={product.prodImage?.secure_url}
+                alt={product.title}
+                className="product-img"
+              />
+            </div>
 
-            <button
-              onClick={() => deleteProduct(product._id)}
-            >
-              Delete
-            </button>
+            <div className="product-content">
+              <h3>{product.title}</h3>
+
+              <p className="product-price">
+                ₦{product.price?.toLocaleString()}
+              </p>
+
+              <p className="product-category">
+                {product.category}
+              </p>
+
+              <p className="product-stock">
+                Stock: {product.stock}
+              </p>
+
+              <p className="product-description">
+                {product.description}
+              </p>
+            </div>
+
+            <div className="actions">
+              <button
+                className="edit"
+                onClick={() => startEdit(product)}
+              >
+                Edit
+              </button>
+
+              <button
+                className="delete"
+                onClick={() => deleteProduct(product._id)}
+              >
+                Delete
+              </button>
+            </div>
+
           </div>
         ))}
+
       </div>
+
     </div>
   )
 }

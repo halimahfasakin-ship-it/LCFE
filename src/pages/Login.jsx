@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import google from "../assets/google.png"
 import apple from "../assets/apple.png"
@@ -13,7 +13,7 @@ const Login = () => {
   const cookies = new Cookies()
   console.log(cookies.get("token"))
   console.log(cookies.get("userId"))
-  const [loading, setloading] = useState(true)
+  const [loading, setloading] = useState(false)
   let navigate = useNavigate()
 
   let formik = useFormik({
@@ -24,7 +24,8 @@ const Login = () => {
 
     onSubmit: async (values) => {
       try {
-        const response = await axios.post( "https://lcbe.onrender.com/api/v1/login", values)
+        setloading(true)
+        const response = await axios.post("https://lcbe.onrender.com/api/v1/login", values)
         const token = response.data.data.token
         const decoded = jwtDecode(token)
         console.log("DECODED TOKEN:", decoded);
@@ -50,12 +51,14 @@ const Login = () => {
           expires: new Date(decoded.exp * 1000)
         })
 
-        navigate("/")
         alert("Logged in Successfully!")
+        navigate("/")
 
       } catch (error) {
         console.log(error)
         alert("Invalid credentials")
+      }finally{
+        setloading(false)
       }
     },
 
@@ -82,7 +85,7 @@ const Login = () => {
           <Link to="/forgot-password">Forgot Password?</Link>
         </div>
 
-        <button type='submit' className='login-btn' onClick={formik.handleSubmit}>Log in</button>
+        <button type='submit' className='login-btn' onClick={formik.handleSubmit}>{loading ? "Logging in..." : "Log in"}</button>
 
         <p className='signup-text'>
           Don't have an account? <Link to="/signup">Sign up</Link>

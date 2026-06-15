@@ -3739,3 +3739,8 @@ section {
     border: 2px solid #ddd;
     margin-bottom: 10px;
 }
+
+.login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

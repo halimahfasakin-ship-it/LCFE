@@ -10,8 +10,8 @@ import * as yup from "yup"
 const Signup = () => {
   const cookies = new Cookies()
   const navigate = useNavigate()
-  const [role, setRole] = useState("user")
   const [image, setimage] = useState(null)
+  const [loading, setLoading] = useState(false)
   const onFileChanged = (e) => {
         console.log(e.target.files[0]);
         let file = e.target.files[0]
@@ -33,14 +33,16 @@ const Signup = () => {
       lastName: "",
       email: "",
       password: "",
-      gender: "",
-      role: ""
+      gender: ""
     },
 
     onSubmit: async (values) => {
-      console.log("FINAL VALUES:", JSON.stringify(values, null, 2));
+      // console.log("FINAL VALUES:", JSON.stringify(values, null, 2));
+      // alert("Account created successfully! Please log in.")
+      // navigate("/login")
       try {
-        const response = await axios.post("https://lcbe.onrender.com/api/v1/addUserToDB", { ...values, profileImage: image })
+        setLoading(true)
+        const response = await axios.post("https://lcbe.onrender.com/api/v1/addUserToDB", { ...values })
         console.log(response.data);
 
         if (response.status === 201) {
@@ -58,6 +60,8 @@ const Signup = () => {
           alert("Error creating user")
 
         }
+      }finally{
+        setLoading(false)
       }
 
     },
@@ -74,6 +78,7 @@ const Signup = () => {
   // console.log(formik.values);
   // console.log(formik.errors);
   console.log(formik.touched);
+  const [role, setRole] = useState("user")
 
   return (
     <div className='login-container'>
@@ -84,7 +89,6 @@ const Signup = () => {
 
         {/* Form */}
         <form className='input-group'>
-          <input type="file" name="" onChange={(e) => onFileChanged(e)} /><br />
           <input type="text" placeholder='First Name' name='firstName' onChange={formik.handleChange} onBlur={formik.handleBlur} />
           {(formik.touched.firstName && formik.errors.firstName) && <small className='text-danger'>{formik.errors.firstName}</small>}
           <input type="text" placeholder='Last Name' name='lastName' onChange={formik.handleChange} onBlur={formik.handleBlur} />
@@ -101,7 +105,7 @@ const Signup = () => {
         </form>
 
         <button type='submit' className='login-btn' onClick={formik.handleSubmit}>
-          Create Account
+          {loading ? "Creating Account..." : "Create Account"}
         </button>
 
         <p className='signup-text'>

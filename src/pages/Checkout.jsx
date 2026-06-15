@@ -56,8 +56,10 @@ const Checkout = () => {
   }
 
   useEffect(() => {
-    getCart()
-  }, [])
+    if (userId) {
+      getCart()
+    }
+  }, [userId])
 
   const handleConfirm = async () => {
     if (!formData.fullName || !formData.email || !formData.address || !formData.city || !formData.state) {
@@ -130,9 +132,7 @@ const Checkout = () => {
       handler.openIframe()
     } catch (error) {
       console.error(error)
-      setMessage(error?.response?.data?.message || "Unable to start payment. Please try again.")
-    } finally {
-      setLoading(false)
+      setMessage("Unable to complete checkout at this time. Please try again.")
     }
   }
 

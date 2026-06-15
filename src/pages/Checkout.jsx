@@ -319,8 +319,8 @@ const Checkout = () => {
 
           <button
             className="place-order-btn"
-            onClick={handleConfirm}
-            disabled={loading}
+            // onClick={handleConfirm}
+            // disabled={loading}
           >
             {loading ? "Processing payment..." : "Place Order"}
           </button>

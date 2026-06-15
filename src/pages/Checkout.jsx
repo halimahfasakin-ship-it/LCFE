@@ -2,7 +2,6 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'universal-cookie'
-import Footer from '../component/Footer'
 
 const Checkout = () => {
   const navigate = useNavigate()
@@ -13,6 +12,31 @@ const Checkout = () => {
   console.log("token:", cookies.get("token"))
 
   const [cart, setCart] = useState(null)
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: ""
+  })
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState("")
+
+  const loadPaystackScript = () => {
+    return new Promise((resolve, reject) => {
+      if (window.PaystackPop) {
+        return resolve(window.PaystackPop)
+      }
+
+      const script = document.createElement("script")
+      script.src = "https://js.paystack.co/v1/inline.js"
+      script.onload = () => resolve(window.PaystackPop)
+      script.onerror = () => reject(new Error("Unable to load Paystack script"))
+      document.body.appendChild(script)
+    })
+  }
+
   const getCart = async () => {
     try {
       const response = await axios.get(
@@ -36,8 +60,85 @@ const Checkout = () => {
   }, [])
 
   const handleConfirm = async () => {
-    console.log("Create Order here");
+    if (!formData.fullName || !formData.email || !formData.address || !formData.city || !formData.state) {
+      setMessage("Please complete all shipping fields before placing your order.")
+      return
+    }
 
+    if (!cart?.products?.length) {
+      setMessage("Your cart is empty.")
+      return
+    }
+
+    if (!token) {
+      setMessage("Login is required to complete checkout.")
+      return
+    }
+
+    if (!import.meta.env.VITE_PAYSTACK_PUBLIC_KEY) {
+      setMessage("Paystack public key is not configured.")
+      return
+    }
+
+    setLoading(true)
+    setMessage("")
+
+    const deliveryAddress = `${formData.address}, ${formData.city}, ${formData.state}`
+
+    try {
+      const response = await axios.post(
+        "https://lcbe.onrender.com/api/v1/initialize-payment",
+        { deliveryAddress },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+
+      const paystackData = response.data.data
+      const paystack = await loadPaystackScript()
+
+      const handler = paystack.setup({
+        key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+        email: formData.email,
+        amount: total * 100,
+        ref: paystackData.reference,
+        onClose: () => {
+          setMessage("Payment window closed before completion.")
+        },
+        callback: async (res) => {
+          try {
+            setMessage("Verifying payment...")
+            const verifyResponse = await axios.post(
+              "https://lcbe.onrender.com/api/v1/verify-payment",
+              {
+                reference: res.reference,
+                deliveryAddress
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                }
+              }
+            )
+
+            setMessage("Payment successful! Order created.")
+            console.log("Order created:", verifyResponse.data.data)
+          } catch (err) {
+            console.error(err)
+            setMessage("Payment succeeded but verification failed. Please contact support.")
+          }
+        }
+      })
+
+      handler.openIframe()
+    } catch (error) {
+      console.error(error)
+      setMessage(error?.response?.data?.message || "Unable to start payment. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const selectedStaff = JSON.parse(localStorage.getItem("selectedStaff"))
@@ -60,6 +161,9 @@ const Checkout = () => {
               <label>Full Name</label>
               <input
                 type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                 placeholder="Enter your full name"
               />
             </div>
@@ -70,6 +174,9 @@ const Checkout = () => {
                 <label>Email Address</label>
                 <input
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="johndoe@gmail.com"
                 />
               </div>
@@ -78,6 +185,9 @@ const Checkout = () => {
                 <label>Phone Number</label>
                 <input
                   type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="+234..."
                 />
               </div>
@@ -88,6 +198,9 @@ const Checkout = () => {
               <label>Address</label>
               <input
                 type="text"
+                name="address"
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                 placeholder="Street address"
               />
             </div>
@@ -98,6 +211,9 @@ const Checkout = () => {
                 <label>City</label>
                 <input
                   type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                   placeholder="Lagos"
                 />
               </div>
@@ -106,6 +222,9 @@ const Checkout = () => {
                 <label>State</label>
                 <input
                   type="text"
+                  name="state"
+                  value={formData.state}
+                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                   placeholder="Lagos State"
                 />
               </div>
@@ -206,9 +325,12 @@ const Checkout = () => {
           <button
             className="place-order-btn"
             onClick={handleConfirm}
+            disabled={loading}
           >
-            Place Order
+            {loading ? "Processing payment..." : "Place Order"}
           </button>
+
+          {message && <p className="checkout-message">{message}</p>}
 
           <p className="secure-checkout">
             Secure Checkout
@@ -217,9 +339,6 @@ const Checkout = () => {
         </div>
 
       </div>
-
-      <Footer />
-
     </div>
   )
 }

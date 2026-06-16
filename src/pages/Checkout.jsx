@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'universal-cookie'
+import PaystackPop from "@paystack/inline-js";
 
 const Checkout = () => {
   const navigate = useNavigate()
@@ -93,7 +94,22 @@ const Checkout = () => {
       console.log(response.data)
 
       const paystackData = response.data.data
-      const paystack = await loadPaystackScript()
+      const paystack = new PayStackPop();
+
+paystack.newTransaction({
+  key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+  email: formData.email,
+  amount: total * 100,
+  reference: paystackData.reference,
+
+  onSuccess: async (transaction) => {
+    // verify payment here
+  },
+
+  onCancel: () => {
+    setMessage("Payment cancelled");
+  }
+});
       console.log("Paystack object:", paystack)
 console.log("Public key:", import.meta.env.VITE_PAYSTACK_PUBLIC_KEY)
 console.log("Reference:", paystackData.reference)

@@ -102,7 +102,7 @@ const Product = () => {
             <img src={product?.prodImage?.secure_url} alt={product.title} />
           </div>
           <div className="product-info">
-            <h1>{product.title}</h1>
+            <h1>{product?.title}</h1>
             <p className="category">
               Category: {product?.category}
             </p>

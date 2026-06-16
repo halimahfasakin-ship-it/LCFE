@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Navbar = ({ setCartOpen }) => {
     const cookies = new Cookies();
@@ -168,7 +169,7 @@ const Navbar = ({ setCartOpen }) => {
 
                                         <button
                                             onClick={() => {
-                                                alert("This action cannot be undone");
+                                                toast.error("This action cannot be undone");
                                                 deleteAccount(user._id);
                                             }}
                                             className="dropdown-btn delete"

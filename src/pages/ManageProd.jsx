@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
 import Cookies from "universal-cookie"
 
 const ManageProd = () => {
@@ -60,12 +61,12 @@ const ManageProd = () => {
         }
       )
 
-      alert(res.data.message)
+      toast.success(res.data.message)
       getProducts()
       resetForm()
     } catch (err) {
       console.log(err.response?.data || err)
-      alert(err.response?.data?.message || "Failed to add product")
+      toast.error(err.response?.data?.message || "Failed to add product")
     }
   }
 
@@ -80,7 +81,7 @@ const ManageProd = () => {
       getProducts()
     } catch (error) {
       console.log(error)
-      alert("Failed to delete product")
+      toast.error("Failed to delete product")
     }
   }
 
@@ -103,7 +104,7 @@ const ManageProd = () => {
       })
     } catch (error) {
       console.log(error)
-      alert("Failed to edit product")
+      toast.error("Failed to edit product")
     }
   }
 
@@ -156,7 +157,7 @@ const ManageProd = () => {
       resetForm()
     } catch (err) {
       console.log(err.response?.data || err)
-      alert("Edit failed")
+      toast.error("Edit failed")
     }
   }
 

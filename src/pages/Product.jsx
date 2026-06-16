@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from "universal-cookie"
 import { InfinitySpin } from 'react-loader-spinner'
+import { toast } from 'react-toastify'
 
 const Product = () => {
   const { id } = useParams()
@@ -60,14 +61,14 @@ const Product = () => {
       console.log(response.data)
 
 
-      alert("Product added to cart")
+      toast.success("Product added to cart")
       window.location.reload()
 
     } catch (error) {
 
       console.log(error)
 
-      alert(
+      toast.error(
         error?.response?.data?.message ||
         "Failed to add product to cart"
       )

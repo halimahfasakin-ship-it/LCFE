@@ -6,7 +6,6 @@ import { useFormik } from 'formik'
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import * as yup from "yup"
-import { toast } from 'react-toastify'
 
 const Signup = () => {
   const cookies = new Cookies()
@@ -47,18 +46,18 @@ const Signup = () => {
         console.log(response.data);
 
         if (response.status === 201) {
-          toast.success("Account created successfully! Please log in.")
+          alert("Account created successfully! Please log in.")
           navigate("/login")
         }
 
       } catch (error) {
         if (error.response?.status == 400) {
           console.log(error.response.data);
-          toast.error("User already exists");
+          alert("User already exists");
           return;
         } else {
           console.log(error);
-          toast.error("Error creating user")
+          alert("Error creating user")
 
         }
       }finally{

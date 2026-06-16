@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 import PaystackPop from "@paystack/inline-js";
-import { toast } from 'react-toastify';
 
 const Checkout = () => {
   const navigate = useNavigate()
@@ -107,18 +106,18 @@ const Checkout = () => {
               }
             );
 
-            toast.success("Payment successful! Order created.");
+            alert("Payment successful! Order created.");
             console.log(verifyResponse.data);
 
             navigate("/");
           } catch (err) {
             console.error(err);
-            toast.error("Payment verification failed.");
+            alert("Payment verification failed.");
           }
         },
 
         onCancel: () => {
-          toast.error("Payment cancelled.");
+          alert("Payment cancelled.");
         }
       });
       console.log("Paystack object:", paystack)

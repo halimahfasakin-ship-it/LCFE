@@ -90,10 +90,14 @@ const Checkout = () => {
           }
         }
       )
+      console.log(response.data)
 
       const paystackData = response.data.data
       const paystack = await loadPaystackScript()
-
+      console.log("Paystack object:", paystack)
+console.log("Public key:", import.meta.env.VITE_PAYSTACK_PUBLIC_KEY)
+console.log("Reference:", paystackData.reference)
+console.log("Amount:", total * 100)
       const handler = paystack.setup({
         key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "",
         email: formData.email,

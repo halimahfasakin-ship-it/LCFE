@@ -73,7 +73,7 @@ const Home = () => {
             <div className="featured-card" key={product._id}>
               <img src={product.prodImage?.secure_url} alt={product.title || "Product"} />
 
-              <h3>{products[0].title}</h3>
+              <h3>{product.title}</h3>
               <p className="price">₦{product.price.toLocaleString()}</p>
 
               <button className="btn-1" onClick={() => {navigate(`/product/${product._id}`)}}>View Product</button>

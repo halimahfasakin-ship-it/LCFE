@@ -22,19 +22,6 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
 
-  const loadPaystackScript = () => {
-    return new Promise((resolve, reject) => {
-      if (window.PaystackPop) {
-        return resolve(window.PaystackPop)
-      }
-
-      const script = document.createElement("script")
-      script.src = "https://js.paystack.co/v1/inline.js"
-      script.onload = () => resolve(window.PaystackPop)
-      script.onerror = () => reject(new Error("Unable to load Paystack script"))
-      document.body.appendChild(script)
-    })
-  }
 
   const getCart = async () => {
     try {
@@ -94,41 +81,22 @@ const Checkout = () => {
       console.log(response.data)
 
       const paystackData = response.data.data
-      const paystack = new PayStackPop();
+      const paystack = new PaystackPop();
 
-paystack.newTransaction({
-  key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
-  email: formData.email,
-  amount: total * 100,
-  reference: paystackData.reference,
-
-  onSuccess: async (transaction) => {
-    // verify payment here
-  },
-
-  onCancel: () => {
-    setMessage("Payment cancelled");
-  }
-});
-      console.log("Paystack object:", paystack)
-console.log("Public key:", import.meta.env.VITE_PAYSTACK_PUBLIC_KEY)
-console.log("Reference:", paystackData.reference)
-console.log("Amount:", total * 100)
-      const handler = paystack.setup({
-        key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "",
+      paystack.newTransaction({
+        key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
         email: formData.email,
         amount: total * 100,
         reference: paystackData.reference,
-        onClose: () => {
-          setMessage("Payment window closed before completion.")
-        },
-        callback: async (res) => {
+
+        onSuccess: async (transaction) => {
           try {
-            setMessage("Verifying payment...")
+            setMessage("Verifying payment...");
+
             const verifyResponse = await axios.post(
               "https://lcbe.onrender.com/api/v1/verify-payment",
               {
-                reference: res.reference,
+                reference: transaction.reference,
                 deliveryAddress
               },
               {
@@ -136,18 +104,27 @@ console.log("Amount:", total * 100)
                   Authorization: `Bearer ${token}`
                 }
               }
-            )
+            );
 
-            setMessage("Payment successful! Order created.")
-            console.log("Order created:", verifyResponse.data.data)
+            setMessage("Payment successful! Order created.");
+            console.log(verifyResponse.data);
+
+            navigate("/orders");
           } catch (err) {
-            console.error(err)
-            setMessage("Payment succeeded but verification failed. Please contact support.")
+            console.error(err);
+            setMessage("Payment verification failed.");
           }
-        }
-      })
+        },
 
-      handler.openIframe()
+        onCancel: () => {
+          setMessage("Payment cancelled.");
+        }
+      });
+      console.log("Paystack object:", paystack)
+      console.log("Public key:", import.meta.env.VITE_PAYSTACK_PUBLIC_KEY)
+      console.log("Reference:", paystackData.reference)
+      console.log("Amount:", total * 100)
+
       setLoading(false)
     } catch (error) {
       console.error(error)

@@ -51,6 +51,7 @@ const Cart = () => {
         }
       )
       getCart()
+      window.location.reload()
 
     } catch (error) {
 

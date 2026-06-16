@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paystack/inline-js": "^2.22.9",
     "axios": "^1.16.0",
     "formik": "^2.4.9",
     "jwt-decode": "^4.0.0",

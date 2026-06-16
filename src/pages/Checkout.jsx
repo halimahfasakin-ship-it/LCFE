@@ -102,7 +102,7 @@ console.log("Amount:", total * 100)
         key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "",
         email: formData.email,
         amount: total * 100,
-        ref: paystackData.reference,
+        reference: paystackData.reference,
         onClose: () => {
           setMessage("Payment window closed before completion.")
         },
@@ -132,9 +132,11 @@ console.log("Amount:", total * 100)
       })
 
       handler.openIframe()
+      setLoading(false)
     } catch (error) {
       console.error(error)
       setMessage("Unable to complete checkout at this time. Please try again.")
+      setLoading(false)
     }
   }
 

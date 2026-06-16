@@ -3,6 +3,7 @@ import { react, useEffect, useState } from 'react'
 import { InfinitySpin } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom'
 import { useSearchParams } from "react-router-dom";
+import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie'
 
 const Products = () => {
@@ -51,7 +52,7 @@ const Products = () => {
   const addToCart = async (productId) => {
     const token = cookies.get("token")
     if (!token) {
-      alert("Login Required");
+      toast.warning("Login Required");
       navigate("/login")
       return
     }
@@ -69,11 +70,11 @@ const Products = () => {
           }
         }
       );
-      alert(response.data.message);
+      toast.success(response.data.message);
       window.location.reload()
     } catch (error) {
       console.log(error);
-      alert("Failed to add product to cart");
+      toast.error("Failed to add product to cart");
     }
   }
 

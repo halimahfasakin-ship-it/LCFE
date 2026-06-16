@@ -8,6 +8,7 @@ import { useFormik } from 'formik'
 import { jwtDecode } from 'jwt-decode'
 import * as yup from "yup"
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const cookies = new Cookies()
@@ -48,13 +49,13 @@ const Login = () => {
           expires: new Date(decoded.exp * 1000)
         })
 
-        alert("Logged in Successfully!")
+        toast.success("Logged in Successfully!")
         navigate("/")
         window.location.reload()
 
       } catch (error) {
         console.log(error)
-        alert("Invalid credentials")
+        toast.error("Invalid credentials")
       }finally{
         setloading(false)
       }

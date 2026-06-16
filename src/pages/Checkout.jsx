@@ -106,18 +106,18 @@ const Checkout = () => {
               }
             );
 
-            setMessage("Payment successful! Order created.");
+            alert("Payment successful! Order created.");
             console.log(verifyResponse.data);
 
-            navigate("/orders");
+            navigate("/");
           } catch (err) {
             console.error(err);
-            setMessage("Payment verification failed.");
+            alert("Payment verification failed.");
           }
         },
 
         onCancel: () => {
-          setMessage("Payment cancelled.");
+          alert("Payment cancelled.");
         }
       });
       console.log("Paystack object:", paystack)

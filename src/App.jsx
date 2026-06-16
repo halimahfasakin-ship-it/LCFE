@@ -30,6 +30,7 @@ const App = () => {
   return (
     <div>
       <Navbar />
+      <ToastContainer position='top-right' autoClose={3000} theme='colored'/>
       <Routes>
         <Route index element={<Home />} />
         <Route path='/signup' element={<Signup />} />
@@ -53,7 +54,6 @@ const App = () => {
           <Route path="/manage-products" element={<ManageProd />} />
           {/* <Route path="/manage-staff" element={<ManageStaff />} /> */}
         </Route>
-        <ToastContainer position='top-right' autoClose={3000} theme='colored'/>
         <Route path='*' element={<NotFound />} />
       </Routes>
     </div>

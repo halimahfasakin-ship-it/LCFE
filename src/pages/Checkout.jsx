@@ -111,6 +111,7 @@ const Checkout = () => {
             console.log(verifyResponse.data);
 
             navigate("/");
+            window.location.reload()
           } catch (err) {
             console.error(err);
             toast.error("Payment verification failed.");
